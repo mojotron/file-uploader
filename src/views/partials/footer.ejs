@@ -1,6 +1,20 @@
-<footer class="w-full mt-auto">
-  <p>
-    &copy;<%= new Date().getFullYear();%>
-    <a>mojotron</a>
-  </p>
+<footer class="w-full mt-auto bg-gray-900 py-2 px-4">
+  <section class="flex flex-col justify-start">
+    <div class="flex items-center gap-2 opacity-40">
+      <%- include("./logo", {small: true}) %>
+      <span class="font-bold font-barlow text-gray-200"
+        >&copy;<%= new Date().getFullYear();%></span
+      >
+    </div>
+    <p class="text-gray-400">
+      <span>created by</span>
+      <a
+        class="font-bold hover:text-blue-300"
+        href="https://github.com/mojotron/file-uploader"
+        target="_blank"
+        rel="noopener noreferrer"
+        >@mojotron</a
+      >
+    </p>
+  </section>
 </footer>

@@ -1,3 +1,10 @@
-<header class="bg-gray-900 flex items center px-4 py-2">
-  <h2 class="font-barlow font-bold text-gray-200">File Uploader</h2>
+<header class="bg-gray-900 flex items-center justify-between px-4 py-2">
+  <%- include("./logo",{ small: false}) %>
+  <nav>
+    <%- include("../partials/cta-link", {path: `/login`, text: `login`,
+    inverted: false}) %>
+    <!--  -->
+    <%- include("../partials/cta-link", {path: `/signup`, text: `signup`,
+    inverted: true}) %>
+  </nav>
 </header>

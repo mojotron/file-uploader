@@ -1,0 +1,26 @@
+<!-- 
+params {
+  label: string
+  nameId: string
+  type: "text"
+  placeholder: string
+  value: string 
+}
+-->
+<div class="flex flex-col gap-1">
+  <label
+    class="block text-gray-200 font-bold font-barlow tracking-wide"
+    for="<%- nameId %>"
+    ><%- label %></label
+  >
+  <!-- text type -->
+
+  <input
+    class="bg-gray-800 appearance-none border-2 border-gray-600 rounded-md w-full py-1 px-4 text-gray-200 leading-tight focus:outline-none focus:border-blue-300"
+    type="<%- type %>"
+    name="<%- nameId %>"
+    id="<%- nameId %>"
+    placeholder="<%- placeholder %>"
+    value="<%- value %>"
+  />
+</div>

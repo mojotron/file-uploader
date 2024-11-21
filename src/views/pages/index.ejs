@@ -9,10 +9,13 @@
   <body class="w-[100vw] h-[100vh] bg-gray-800 flex flex-col">
     <%- include("../partials/header") %>
 
-    <main>
+    <main class="px-4 py-8 flex flex-col items-center">
       <h2>Ready to try?</h2>
       <p>Store your files and ....</p>
       <button>Get started now</button>
+      <%- include("../partials/cta-link", {path: `/signup`, text: `signup`,
+      inverted: false}) %> <%- include("../partials/cta-link", {path: `/signup`,
+      text: `signup`, inverted: true}) %>
     </main>
 
     <%- include("../partials/footer") %>
