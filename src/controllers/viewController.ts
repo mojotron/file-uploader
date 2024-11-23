@@ -6,7 +6,17 @@ const getIndexView = (req: Request, res: Response) => {
 };
 
 const getSignupView = (req: Request, res: Response) => {
-  return res.status(StatusCodes.OK).render("pages/signup-form");
+  //TODO CHECK AUTH and redirect
+  return res.status(StatusCodes.OK).render("pages/signup-form", {
+    actionPath: "/signup",
+    inputValues: {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationErrors: [],
+  });
 };
 
 const getLoginView = (req: Request, res: Response) => {

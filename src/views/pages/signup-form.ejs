@@ -10,22 +10,33 @@
     <%- include("../partials/header") %>
 
     <main class="px-4 py-8 flex flex-col items-center">
-      <form class="w-full sm:w-[600px] flex flex-col gap-2">
+      <form
+        action="<%- actionPath %>"
+        method="post"
+        class="w-full sm:w-[600px] flex flex-col gap-2"
+      >
         <%- include("../partials/section-heading", {text: `create new account`})
         %>
         <!--  -->
         <%- include("../partials/input-field", {label: `username`, nameId:
-        `username`, type: `text`, placeholder: `john_doe`, value: ""}) %>
+        `username`, type: `text`, placeholder: `john_doe`, value:
+        `${inputValues.username}`}) %>
         <!--  -->
         <%- include("../partials/input-field", {label: `email`, nameId: `email`,
-        type: `email`, placeholder: `john_doe@example.com`, value: ""}) %>
+        type: `email`, placeholder: `john_doe@example.com`, value:
+        `${inputValues.email}`}) %>
         <!--  -->
         <%- include("../partials/input-field", {label: `password`, nameId:
-        `password`, type: `password`, placeholder: `••••••••`, value: ""}) %>
+        `password`, type: `password`, placeholder: `••••••••`, value:
+        `${inputValues.password}`}) %>
         <!--  -->
         <%- include("../partials/input-field", {label: `confirm password`,
         nameId: `confirmPassword`, type: `password`, placeholder: `••••••••`,
-        value: ""}) %>
+        value: `${inputValues.confirmPassword}`}) %>
+        <!--  -->
+        <%- include("../partials/form-errors", {validationErrors}) %>
+        <!--  -->
+        <%- include("../partials/form-button", {text: `Submit`}) %>
       </form>
     </main>
 

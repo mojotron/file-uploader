@@ -1,43 +1,53 @@
-import { body } from "express-validator";
+import { body, check } from "express-validator";
 import {
   USERNAME_LENGTH_MIN,
   USERNAME_LENGTH_MAX,
-} from "../../constants/inputFieldsConstants";
+} from "../../constants/inputFieldsConstants.js";
 
 const signupValidator = [
   body("username")
     .trim()
     .notEmpty()
-    .withMessage("username field must not be empty")
+    .withMessage("username must not be empty")
     .isString()
-    .withMessage("username field must be string of characters")
+    .withMessage("username must be string of characters")
     .isLength({ min: USERNAME_LENGTH_MIN, max: USERNAME_LENGTH_MAX })
-    .withMessage("username field length must be between 3 and 25 characters")
+    .withMessage("username length must be between 3 and 25 characters")
     .matches(/^[A-Za-z0-9\-\_]+$/)
-    .withMessage("username field accepts letters, numbers dash and underscore")
+    .withMessage(
+      "username accepts letters, numbers dash and underscore (no space)"
+    )
     .escape(),
 
   body("email")
     .trim()
     .notEmpty()
-    .withMessage("email field must not be empty")
+    .withMessage("email must not be empty")
     .isString()
-    .withMessage("username field must be string of characters")
+    .withMessage("username must be string of characters")
     .isEmail()
-    .withMessage("email field must not be empty")
+    .withMessage("email format is invalid")
     .normalizeEmail()
     .escape(),
 
   body("password")
     .trim()
     .notEmpty()
-    .withMessage("password field must not be empty")
+    .withMessage("password must not be empty")
+    .matches(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*\W)(?!.* ).{8,}$/)
+    .withMessage(
+      "password must be be minimum of 8 character and including uppercase letter, lowercase letter, number and special character @$!%*?&"
+    )
     .escape(),
 
-  body("confirmPassword")
+  check("confirmPassword")
     .trim()
-    .notEmpty()
-    .withMessage("confirm password field must not be empty")
+    .custom((confirmPassword, { req }) => {
+      const password = req.body.password;
+      if (password !== confirmPassword) return false;
+      return true;
+    })
+    .withMessage("confirm password not matching password")
     .escape(),
 ];
 

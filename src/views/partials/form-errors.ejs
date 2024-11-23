@@ -1,0 +1,12 @@
+<!-- 
+params: {  
+  validationError: string[]
+}
+ -->
+<% if(validationErrors.length > 0) { %>
+<ul class="bg-gray-900 mx-2 p-2 rounded-md">
+  <% validationErrors.forEach((error) => { %>
+  <li class="text-red-300"><%- error %></li>
+  <% }) %>
+</ul>
+<% } %>
