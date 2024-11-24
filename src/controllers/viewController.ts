@@ -20,7 +20,15 @@ const getSignupView = (req: Request, res: Response) => {
 };
 
 const getLoginView = (req: Request, res: Response) => {
-  return res.status(StatusCodes.OK).render("pages/login-form");
+  //TODO CHECK AUTH and redirect
+  return res.status(StatusCodes.OK).render("pages/login-form", {
+    actionPath: "/login",
+    inputValues: {
+      email: "",
+      password: "",
+    },
+    validationErrors: [],
+  });
 };
 
 export { getIndexView, getSignupView, getLoginView };

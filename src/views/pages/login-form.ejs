@@ -15,12 +15,7 @@
         method="post"
         class="w-full sm:w-[600px] flex flex-col gap-2"
       >
-        <%- include("../partials/section-heading", {text: `create new account`})
-        %>
-        <!--  -->
-        <%- include("../partials/input-field", {label: `username`, nameId:
-        `username`, type: `text`, placeholder: `john_doe`, value:
-        `${inputValues.username}`}) %>
+        <%- include("../partials/section-heading", {text: `login`}) %>
         <!--  -->
         <%- include("../partials/input-field", {label: `email`, nameId: `email`,
         type: `email`, placeholder: `john_doe@example.com`, value:
@@ -30,13 +25,9 @@
         `password`, type: `password`, placeholder: `••••••••`, value:
         `${inputValues.password}`}) %>
         <!--  -->
-        <%- include("../partials/input-field", {label: `confirm password`,
-        nameId: `confirmPassword`, type: `password`, placeholder: `••••••••`,
-        value: `${inputValues.confirmPassword}`}) %>
-        <!--  -->
         <%- include("../partials/form-errors", {validationErrors}) %>
         <!--  -->
-        <%- include("../partials/form-button", {text: `Signup`}) %>
+        <%- include("../partials/form-button", {text: `Login`}) %>
       </form>
     </main>
 

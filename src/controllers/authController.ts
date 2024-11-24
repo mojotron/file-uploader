@@ -23,4 +23,12 @@ const postSignup = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-export { postSignup };
+const postLogin = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    res.json({ msg: "post login" });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export { postSignup, postLogin };

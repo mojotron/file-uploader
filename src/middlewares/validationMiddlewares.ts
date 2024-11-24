@@ -49,4 +49,12 @@ const signupValidationMiddleware = async (
   }
 };
 
-export { signupValidationMiddleware };
+const loginValidationMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  return next();
+};
+
+export { signupValidationMiddleware, loginValidationMiddleware };
