@@ -23,12 +23,16 @@ const postSignup = async (req: Request, res: Response, next: NextFunction) => {
   }
 };
 
-const postLogin = async (req: Request, res: Response, next: NextFunction) => {
+const postLogout = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    res.json({ msg: "post login" });
+    req.logout((logoutErr) => {
+      if (logoutErr) return next(logoutErr);
+    });
+
+    return res.redirect("/");
   } catch (error) {
     return next(error);
   }
 };
 
-export { postSignup, postLogin };
+export { postSignup, postLogout };

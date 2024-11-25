@@ -54,6 +54,20 @@ const loginValidationMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
+  const result = validationResult(req);
+  if (!result.isEmpty()) {
+    const validationErrors = getErrorMessages(result);
+
+    return res.status(StatusCodes.OK).render("pages/login-form", {
+      actionPath: "/login",
+      inputValues: {
+        email: req.body.email,
+        password: req.body.password,
+      },
+      validationErrors,
+    });
+  }
+
   return next();
 };
 
