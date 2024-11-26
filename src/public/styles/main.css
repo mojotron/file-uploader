@@ -556,9 +556,6 @@ video {
 .justify-center{
   justify-content: center;
 }
-.justify-between{
-  justify-content: space-between;
-}
 .gap-1{
   gap: 8px;
 }
@@ -703,5 +700,17 @@ video {
 
   .sm\:w-\[600px\]{
     width: 600px;
+  }
+
+  .sm\:flex-row{
+    flex-direction: row;
+  }
+
+  .sm\:items-center{
+    align-items: center;
+  }
+
+  .sm\:justify-between{
+    justify-content: space-between;
   }
 }

@@ -10,12 +10,19 @@
     <%- include("../partials/header") %>
 
     <main class="px-4 py-8 flex flex-col items-center">
-      <h2>Ready to try?</h2>
-      <p>Store your files and ....</p>
-      <button>Get started now</button>
-      <%- include("../partials/cta-link", {path: `/signup`, text: `signup`,
-      inverted: false}) %> <%- include("../partials/cta-link", {path: `/signup`,
-      text: `signup`, inverted: true}) %>
+      <section>
+        <%- include("../partials/section-heading", {text: `what is file
+        storage`}) %>
+      </section>
+
+      <section>
+        <%- include("../partials/section-heading", {text: `ready to try`}) %>
+      </section>
+
+      <section>
+        <%- include("../partials/section-heading", {text: `access your files
+        from any device`}) %>
+      </section>
     </main>
 
     <%- include("../partials/footer") %>
