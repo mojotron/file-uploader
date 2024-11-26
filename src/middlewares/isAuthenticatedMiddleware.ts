@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { UnauthorizedError } from "../errors/index.js";
+import { StatusCodes } from "http-status-codes";
 
 const isAuthenticatedMiddleware = (
   req: Request,
@@ -8,8 +8,10 @@ const isAuthenticatedMiddleware = (
 ) => {
   try {
     const isUserAuthenticated = req.isAuthenticated();
+
     if (isUserAuthenticated === true) return next();
-    else throw new UnauthorizedError();
+
+    return res.status(StatusCodes.UNAUTHORIZED).redirect("/");
   } catch (error) {
     return next(error);
   }

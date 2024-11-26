@@ -20,7 +20,11 @@ const errorHandlerMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  return res.status(StatusCodes.NOT_FOUND).render("pages/error");
+  return res.status(StatusCodes.NOT_FOUND).render("pages/error", {
+    heading: `404 page not found`,
+    subheading: `error occurred... X `,
+    message: `Check that you selected resources correctly, go to previous page or login.`,
+  });
 };
 
 export { notFoundMiddleware, errorHandlerMiddleware };

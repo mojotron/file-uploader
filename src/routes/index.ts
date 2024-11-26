@@ -17,14 +17,15 @@ import {
 // auth middlewares
 import authMiddleware from "../middlewares/authMiddleware.js";
 import isAuthenticatedMiddleware from "../middlewares/isAuthenticatedMiddleware.js";
+import redirectToDashboardMiddleware from "../middlewares/redirectToDashboardMiddleware.js";
 // routers
 import dashboardRouter from "./dashboardRoutes.js";
 
 const router = Router();
 
-router.get("/", getIndexView);
-router.get("/signup", getSignupView);
-router.get("/login", getLoginView);
+router.get("/", redirectToDashboardMiddleware, getIndexView);
+router.get("/signup", redirectToDashboardMiddleware, getSignupView);
+router.get("/login", redirectToDashboardMiddleware, getLoginView);
 // AUTH
 router.post("/signup", signupValidator, signupValidationMiddleware, postSignup);
 router.post(
