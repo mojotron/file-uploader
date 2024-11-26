@@ -14,8 +14,11 @@ import {
   signupValidationMiddleware,
   loginValidationMiddleware,
 } from "../middlewares/validationMiddlewares.js";
-// auth middleware
+// auth middlewares
 import authMiddleware from "../middlewares/authMiddleware.js";
+import isAuthenticatedMiddleware from "../middlewares/isAuthenticatedMiddleware.js";
+// routers
+import dashboardRouter from "./dashboardRoutes.js";
 
 const router = Router();
 
@@ -31,5 +34,7 @@ router.post(
   authMiddleware
 );
 router.get("/logout", postLogout);
+// DASHBOARD
+router.use("/dashboard", isAuthenticatedMiddleware, dashboardRouter);
 
 export default router;

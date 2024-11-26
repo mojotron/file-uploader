@@ -1,2 +1,3 @@
 google icons
 logo size 30 color #03dac5
+error size 100 color #03dac5

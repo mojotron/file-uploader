@@ -9,6 +9,10 @@ import { PrismaClient } from "@prisma/client";
 //
 import routes from "./routes/index.js";
 import localStrategy from "./config/passport/localStrategy.js";
+import {
+  notFoundMiddleware,
+  errorHandlerMiddleware,
+} from "./middlewares/errorMiddlewares.js";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,5 +49,7 @@ passport.use(localStrategy);
 app.use(passport.session());
 // routes
 app.use(routes);
+app.use(notFoundMiddleware);
+app.use(errorHandlerMiddleware);
 
 app.listen(port, () => console.log(`server running on port ${port}`));

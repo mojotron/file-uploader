@@ -536,6 +536,9 @@ video {
 .w-full{
   width: 100%;
 }
+.max-w-\[400px\]{
+  max-width: 400px;
+}
 .appearance-none{
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -619,6 +622,9 @@ video {
 .font-barlow{
   font-family: Barlow, Inter, sans-serif;
 }
+.font-inter{
+  font-family: Inter, sans-serif;
+}
 .text-2xl{
   font-size: 1.953rem;
 }
@@ -627,6 +633,9 @@ video {
 }
 .text-sm{
   font-size: 0.8rem;
+}
+.text-xl{
+  font-size: 1.563rem;
 }
 .font-bold{
   font-weight: 800;
