@@ -1,0 +1,10 @@
+<header
+  class="bg-gray-900 col-start-1 col-end-13 row-span-1 row-end-2 px-4 flex items-center justify-between"
+>
+  <%- include("./logo", {small: false}) %>
+  <!--  -->
+  <div>
+    <%- include("./dashboard-link", {path: `/logout`, text: `logout`, iconName:
+    `logout`}) %>
+  </div>
+</header>
