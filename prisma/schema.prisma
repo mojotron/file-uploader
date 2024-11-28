@@ -25,4 +25,21 @@ model User {
   username String @unique
   email    String @unique
   password String
+
+  folders       Folder[] @relation("FolderOwner")
+  sharedFolders Folder[]
+}
+
+model Folder {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  createdBy   User   @relation(name: "FolderOwner", fields: [createdById], references: [id])
+  createdById String @unique
+
+  shared   Boolean @default(false)
+  sharedTo User[]
 }

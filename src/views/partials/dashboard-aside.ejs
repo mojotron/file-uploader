@@ -1,3 +1,18 @@
 <aside
-  class="col-start-1 col-end-5 row-start-2 row-end-13 bg-gray-900 sm:col-end-4 md:col-end-3"
-></aside>
+  class="col-start-1 col-end-5 row-start-2 row-end-13 bg-gray-900 sm:col-end-4 md:col-end-3 flex flex-col gap-2 pl-2"
+>
+  <div class="">
+    <%- include("./dashboard-link", {path: `/dashboard/folder/create`, text:
+    `create folder`, iconName: `folder-create`}) %>
+  </div>
+
+  <div>
+    <h3 class="font-barlow font-bold tracking-wider text-gray-400">folders</h3>
+  </div>
+
+  <div>
+    <h3 class="font-barlow font-bold tracking-wider text-gray-400">
+      shared folders
+    </h3>
+  </div>
+</aside>

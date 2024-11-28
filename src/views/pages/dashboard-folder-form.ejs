@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles/main.css" />
+    <title>File Uploader</title>
+  </head>
+  <body class="w-[100vw] h-[100vh] bg-gray-800 grid grid-cols-12 grid-rows-12">
+    <%- include("../partials/dashboard-header") %>
+    <!--  -->
+    <%- include("../partials/dashboard-aside") %>
+    <!--  -->
+    <main
+      class="col-start-5 col-end-13 row-start-2 row-end-13 sm:col-start-4 md:col-start-3 bg-gray-800 p-4"
+    >
+      <form
+        action="<%- actionPath %>"
+        method="post"
+        class="w-full md:w-[600px] flex flex-col gap-2"
+      >
+        <%- include("../partials/section-heading", {text: `create new folder`})
+        %>
+        <!--  -->
+        <%- include("../partials/input-field", {label: `folder name`, nameId:
+        `folderName`, type: `text`, placeholder: `folder_name`, value:
+        `${inputValues.folderName}`}) %>
+        <!--  -->
+        <%- include("../partials/input-field", {label: `folder description`,
+        nameId: `folderDescription`, type: `text`, placeholder: `description`,
+        value: `${inputValues.folderDescription}`}) %>
+        <!--  -->
+        <%- include("../partials/form-errors", {validationErrors}) %>
+        <!--  -->
+        <%- include("../partials/form-button", {text: `Create Folder`}) %>
+      </form>
+    </main>
+  </body>
+</html>

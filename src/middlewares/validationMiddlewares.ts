@@ -71,4 +71,31 @@ const loginValidationMiddleware = (
   return next();
 };
 
-export { signupValidationMiddleware, loginValidationMiddleware };
+const createFolderValidationMiddleware = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const result = validationResult(req);
+
+  if (!result.isEmpty()) {
+    const validationErrors = getErrorMessages(result);
+
+    return res.status(StatusCodes.OK).render("pages/dashboard-folder-form", {
+      actionPath: "/dashboard/folder/create",
+      inputValues: {
+        folderName: "",
+        folderDescription: "",
+      },
+      validationErrors,
+    });
+  }
+
+  return next();
+};
+
+export {
+  signupValidationMiddleware,
+  loginValidationMiddleware,
+  createFolderValidationMiddleware,
+};

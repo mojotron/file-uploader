@@ -6,21 +6,17 @@ const getIndexView = (req: Request, res: Response) => {
 };
 
 const getSignupView = (req: Request, res: Response) => {
-  //TODO CHECK AUTH and redirect
-  return res.status(StatusCodes.OK).render("pages/signup-form", {
-    actionPath: "/signup",
+  return res.status(StatusCodes.OK).render("pages/login-form", {
+    actionPath: "/login",
     inputValues: {
-      username: "",
-      email: "",
-      password: "",
-      confirmPassword: "",
+      folderName: "",
+      folderDescription: "",
     },
     validationErrors: [],
   });
 };
 
 const getLoginView = (req: Request, res: Response) => {
-  //TODO CHECK AUTH and redirect
   return res.status(StatusCodes.OK).render("pages/login-form", {
     actionPath: "/login",
     inputValues: {

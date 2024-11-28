@@ -12,7 +12,9 @@ const signupValidator = [
     .isString()
     .withMessage("username must be string of characters")
     .isLength({ min: USERNAME_LENGTH_MIN, max: USERNAME_LENGTH_MAX })
-    .withMessage("username length must be between 3 and 25 characters")
+    .withMessage(
+      `username length must be between ${USERNAME_LENGTH_MIN} and ${USERNAME_LENGTH_MAX} characters`
+    )
     .matches(/^[A-Za-z0-9\-\_]+$/)
     .withMessage(
       "username accepts letters, numbers dash and underscore (no space)"
