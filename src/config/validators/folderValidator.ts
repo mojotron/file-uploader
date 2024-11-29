@@ -36,10 +36,6 @@ const folderValidator = [
     .withMessage(
       `folder description length must be between ${FOLDER_DESCRIPTION_LENGTH_MIN} and ${FOLDER_DESCRIPTION_LENGTH_MAX} characters`
     )
-    .matches(/^[A-Za-z0-9\-\_]+$/)
-    .withMessage(
-      "folder description accepts letters, numbers dash and underscore (no space)"
-    )
     .escape(),
 ];
 

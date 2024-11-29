@@ -3,16 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./styles/main.css" />
+    <link rel="stylesheet" href="/styles/main.css" />
     <title>File Uploader</title>
   </head>
   <body class="w-[100vw] h-[100vh] bg-gray-800 grid grid-cols-12 grid-rows-12">
     <%- include("../partials/dashboard-header") %>
     <!--  -->
-    <%- include("../partials/dashboard-aside") %>
+    <%- include("../partials/dashboard-aside", {userFolders, selectedFolder}) %>
     <!--  -->
-    <main
-      class="col-start-5 col-end-13 row-start-2 row-end-13 sm:col-start-4 md:col-start-3 bg-gray-800"
-    ></main>
+    <% if(selectedFolderData !== null) { %>
+    <!--  -->
+    <%- include("../partials/dashboard-folder-details", {selectedFolderData,
+    currentUser}) %> <% } %>
   </body>
 </html>

@@ -1,0 +1,35 @@
+<!-- 
+params: {
+  selectedFolderData: {
+    id: string;
+    name: string;
+    description: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    createdById: string;
+    shared: boolean;
+  },
+  currentUser: string (id)
+}
+-->
+<main
+  class="col-start-5 col-end-13 row-start-2 row-end-13 sm:col-start-4 md:col-start-3 bg-gray-800 p-4"
+>
+  <!-- current user is owner display controls -->
+  <% if(currentUser === selectedFolderData.createdById) { %>
+  <div>
+    <%- include("./dashboard-link", {path: ``, text: `edit folder`, iconName:
+    `folder-update`}) %>
+    <!--  -->
+    <%- include("./dashboard-link", {path: ``, text: `delete folder`, iconName:
+    `folder-delete`}) %>
+    <!--  -->
+    <%- include("./dashboard-link", {path: ``, text:
+    `${selectedFolderData.shared ? `shared folder options`:`make folder
+    shared`}`, iconName: `folder-special`}) %>
+  </div>
+  <% } %>
+  <!--  -->
+  <%- include("./section-heading", {text: selectedFolderData.name}) %>
+  <!-- update, delete, add file, toggle shared, list files -->
+</main>

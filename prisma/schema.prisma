@@ -38,7 +38,7 @@ model Folder {
   updatedAt   DateTime @updatedAt
 
   createdBy   User   @relation(name: "FolderOwner", fields: [createdById], references: [id])
-  createdById String @unique
+  createdById String
 
   shared   Boolean @default(false)
   sharedTo User[]

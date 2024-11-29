@@ -82,10 +82,10 @@ const createFolderValidationMiddleware = (
     const validationErrors = getErrorMessages(result);
 
     return res.status(StatusCodes.OK).render("pages/dashboard-folder-form", {
-      actionPath: "/dashboard/folder/create",
+      actionPath: "/dashboard/create-folder",
       inputValues: {
-        folderName: "",
-        folderDescription: "",
+        folderName: req.body.folderName,
+        folderDescription: req.body.folderDescription,
       },
       validationErrors,
     });
