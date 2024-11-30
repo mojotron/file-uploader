@@ -10,6 +10,7 @@ const prisma = new PrismaClient();
 const createFolderGet = (req: Request, res: Response, next: NextFunction) => {
   return res.status(StatusCodes.OK).render("pages/dashboard-folder-form", {
     actionPath: "/dashboard/create-folder",
+    update: false,
     inputValues: {
       folderName: "",
       folderDescription: "",
@@ -27,8 +28,6 @@ const createFolderPost = async (
     const { folderName, folderDescription } = matchedData(req);
     const { userId } = req.user as { userId: string };
 
-    console.log(req.user);
-
     const newFolder = await prisma.folder.create({
       data: {
         createdById: userId,
@@ -37,10 +36,9 @@ const createFolderPost = async (
       },
     });
 
-    console.log(newFolder);
-
-    // TODO REDIRECT TO NEW FOLDER
-    return res.status(StatusCodes.CREATED).redirect("/dashboard");
+    return res
+      .status(StatusCodes.CREATED)
+      .redirect(`/dashboard/${newFolder.name}`);
   } catch (error) {
     console.log(error);
 
@@ -48,16 +46,76 @@ const createFolderPost = async (
   }
 };
 
-const getFolder = async (req: Request, res: Response, next: NextFunction) => {
+const editFolderGet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const { folderName } = req.params;
     const { userId } = req.user as { userId: string };
-    console.log("HO HO");
 
-    return res.status(StatusCodes.OK).render("pages/dashboard-folder");
+    const folderData = await prisma.folder.findFirst({
+      where: { name: folderName, createdById: userId },
+    });
+
+    return res.status(StatusCodes.OK).render("pages/dashboard-folder-form", {
+      actionPath: `/dashboard/${folderName}/edit`,
+      update: true,
+      inputValues: {
+        folderName: folderData?.name,
+        folderDescription: folderData?.description,
+      },
+      validationErrors: [],
+    });
   } catch (error) {
     return next(error);
   }
 };
 
-export { createFolderGet, createFolderPost, getFolder };
+const editFolderPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const oldFolderName = req.params.folderName as string;
+    const { folderName, folderDescription } = matchedData(req);
+    const { userId } = req.user as { userId: string };
+
+    const folderData = await prisma.folder.findFirst({
+      where: { name: oldFolderName, createdById: userId },
+    });
+
+    await prisma.folder.update({
+      where: { id: folderData?.id },
+      data: { name: folderName, description: folderDescription },
+    });
+
+    return res.status(StatusCodes.OK).redirect(`/dashboard/${folderName}`);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const deleteFolderGet = (req: Request, res: Response, next: NextFunction) => {
+  const { folderName } = req.params;
+
+  return res.status(StatusCodes.OK).render("pages/dashboard-confirm-box", {
+    actionPath: `/dashboard/${folderName}/delete`,
+    cancelPath: `/dashboard/${folderName}`,
+    heading: `Delete "${folderName}" folder`,
+    message: `You are about to delete this folder and all files in side. This action is permanent. Do you want to proceed?`,
+  });
+};
+
+const deleteFolderPost = () => {};
+
+export {
+  createFolderGet,
+  createFolderPost,
+  editFolderGet,
+  editFolderPost,
+  deleteFolderGet,
+  deleteFolderPost,
+};

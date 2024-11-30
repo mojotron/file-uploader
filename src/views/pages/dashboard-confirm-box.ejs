@@ -21,23 +21,19 @@
       <form
         action="<%- actionPath %>"
         method="post"
-        class="w-full md:w-[600px] flex flex-col gap-2"
+        class="w-full md:w-[600px] flex flex-col gap-2 border border-red-300"
       >
-        <%- include("../partials/section-heading", {text: `${update ? `edit`:
-        `create new`} folder`}) %>
+        <%- include("../partials/section-heading", {text: heading}) %>
         <!--  -->
-        <%- include("../partials/input-field", {label: `folder name`, nameId:
-        `folderName`, type: `text`, placeholder: `folder_name`, value:
-        `${inputValues.folderName}`}) %>
+        <%- include("../partials/paragraph", {text: message}) %>
+
         <!--  -->
-        <%- include("../partials/input-field", {label: `folder description`,
-        nameId: `folderDescription`, type: `text`, placeholder: `description`,
-        value: `${inputValues.folderDescription}`}) %>
-        <!--  -->
-        <%- include("../partials/form-errors", {validationErrors}) %>
-        <!--  -->
-        <%- include("../partials/form-button", {text: `${update ? `Edit`:
-        `Create`} folder`}) %>
+        <div>
+          <%- include("../partials/cta-link", {path: cancelPath, text: `Cancel`,
+          inverted: false}) %>
+          <!--  -->
+          <%- include("../partials/form-button", {text: `Delete`}) %>
+        </div>
       </form>
     </main>
   </body>

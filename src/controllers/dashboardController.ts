@@ -29,8 +29,6 @@ const getDashboardView = async (
       });
     }
 
-    console.log(selectedFolderData);
-
     // const sharedFolders = await prisma.folder.findMany({
     //   where: { sharedTo: {} },
     // });

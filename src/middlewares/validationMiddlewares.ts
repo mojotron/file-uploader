@@ -71,18 +71,24 @@ const loginValidationMiddleware = (
   return next();
 };
 
-const createFolderValidationMiddleware = (
+const folderValidationMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
+  const { folderName } = req.params; // for checking if folder is created or updated
+  const isUpdating = folderName !== undefined;
+
   const result = validationResult(req);
 
   if (!result.isEmpty()) {
     const validationErrors = getErrorMessages(result);
 
     return res.status(StatusCodes.OK).render("pages/dashboard-folder-form", {
-      actionPath: "/dashboard/create-folder",
+      actionPath: isUpdating
+        ? `/dashboard/${folderName}/edit`
+        : `/dashboard/create-folder`,
+      update: isUpdating,
       inputValues: {
         folderName: req.body.folderName,
         folderDescription: req.body.folderDescription,
@@ -97,5 +103,5 @@ const createFolderValidationMiddleware = (
 export {
   signupValidationMiddleware,
   loginValidationMiddleware,
-  createFolderValidationMiddleware,
+  folderValidationMiddleware,
 };

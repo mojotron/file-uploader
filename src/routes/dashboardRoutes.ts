@@ -4,12 +4,15 @@ import { getDashboardView } from "../controllers/dashboardController.js";
 import {
   createFolderGet,
   createFolderPost,
-  getFolder,
+  editFolderGet,
+  editFolderPost,
+  deleteFolderGet,
+  deleteFolderPost,
 } from "../controllers/folderController.js";
 // validators
 import folderValidator from "../config/validators/folderValidator.js";
 // validation middleware
-import { createFolderValidationMiddleware } from "../middlewares/validationMiddlewares.js";
+import { folderValidationMiddleware } from "../middlewares/validationMiddlewares.js";
 
 const router = Router();
 
@@ -20,9 +23,18 @@ router.get("/create-folder", createFolderGet);
 router.post(
   "/create-folder",
   folderValidator,
-  createFolderValidationMiddleware,
+  folderValidationMiddleware,
   createFolderPost
 );
 router.get("/:folderName", getDashboardView);
+router.get("/:folderName/edit", editFolderGet);
+router.post(
+  "/:folderName/edit",
+  folderValidator,
+  folderValidationMiddleware,
+  editFolderPost
+);
+router.get("/:folderName/delete", deleteFolderGet);
+router.post("/:folderName/delete", deleteFolderPost);
 
 export default router;
