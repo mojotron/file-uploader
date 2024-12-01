@@ -13,11 +13,11 @@ params: {
 }
 -->
 <main
-  class="col-start-5 col-end-13 row-start-2 row-end-13 sm:col-start-4 md:col-start-3 bg-gray-800 p-4"
+  class="col-start-5 col-end-13 row-start-2 row-end-13 sm:col-start-4 md:col-start-3 bg-gray-800 p-4 space-y-4"
 >
   <!-- current user is owner display controls -->
   <% if(currentUser === selectedFolderData.createdById) { %>
-  <div>
+  <div class="flex items-center gap-2">
     <%- include("./dashboard-link", {path:
     `/dashboard/${selectedFolderData.name}/edit`, text: `edit folder`, iconName:
     `folder-update`}) %>
@@ -37,5 +37,11 @@ params: {
     <!--  -->
     <%- include("./paragraph", {text: selectedFolderData.description}) %>
   </header>
-  <!-- update, delete, add file, toggle shared, list files -->
+
+  <!-- FILES -->
+  <section>
+    <%- include("./dashboard-link", {path:
+    `/dashboard/${selectedFolderData.name}/upload-file`, text: `upload file`,
+    iconName: `file-upload`}) %>
+  </section>
 </main>
