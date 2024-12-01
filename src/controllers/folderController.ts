@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { matchedData } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import { PrismaClient } from "@prisma/client";
+import { BadRequestError } from "../errors/index.js";
 
 const prisma = new PrismaClient();
 
@@ -104,12 +105,39 @@ const deleteFolderGet = (req: Request, res: Response, next: NextFunction) => {
   return res.status(StatusCodes.OK).render("pages/dashboard-confirm-box", {
     actionPath: `/dashboard/${folderName}/delete`,
     cancelPath: `/dashboard/${folderName}`,
-    heading: `Delete "${folderName}" folder`,
+    heading: `Delete folder "${folderName}"`,
     message: `You are about to delete this folder and all files in side. This action is permanent. Do you want to proceed?`,
   });
 };
 
-const deleteFolderPost = () => {};
+const deleteFolderPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderName } = req.params;
+    const { userId } = req.user as { userId: string };
+
+    const folderData = await prisma.folder.findFirst({
+      where: { name: folderName, createdById: userId },
+    });
+
+    if (folderData === null) {
+      throw new BadRequestError(
+        `There is no folder with name "${folderName}"!`
+      );
+    }
+
+    await prisma.folder.delete({
+      where: { id: folderData.id },
+    });
+
+    return res.status(StatusCodes.OK).redirect("/dashboard");
+  } catch (error) {
+    return next(error);
+  }
+};
 
 export {
   createFolderGet,

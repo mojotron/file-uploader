@@ -21,14 +21,14 @@
       <form
         action="<%- actionPath %>"
         method="post"
-        class="w-full md:w-[600px] flex flex-col gap-2 border border-red-300"
+        class="w-full md:w-[600px] flex flex-col gap-2 border border-red-300 p-4 rounded-md items-center text-center"
       >
         <%- include("../partials/section-heading", {text: heading}) %>
         <!--  -->
         <%- include("../partials/paragraph", {text: message}) %>
 
         <!--  -->
-        <div>
+        <div class="space-x-4">
           <%- include("../partials/cta-link", {path: cancelPath, text: `Cancel`,
           inverted: false}) %>
           <!--  -->
