@@ -566,6 +566,9 @@ video {
 .max-w-\[400px\]{
   max-width: 400px;
 }
+.cursor-pointer{
+  cursor: pointer;
+}
 .appearance-none{
   -webkit-appearance: none;
      -moz-appearance: none;
@@ -677,6 +680,9 @@ video {
 .pl-2{
   padding-left: 12px;
 }
+.pr-4{
+  padding-right: 24px;
+}
 .text-center{
   text-align: center;
 }
@@ -735,6 +741,44 @@ video {
 }
 .opacity-40{
   opacity: 0.4;
+}
+.file\:mr-4::file-selector-button{
+  margin-right: 24px;
+}
+.file\:border-0::file-selector-button{
+  border-width: 0px;
+}
+.file\:border-r-2::file-selector-button{
+  border-right-width: 2px;
+}
+.file\:border-r-gray-400::file-selector-button{
+  --tw-border-opacity: 1;
+  border-right-color: rgb(143 143 143 / var(--tw-border-opacity, 1));
+}
+.file\:bg-blue-300::file-selector-button{
+  --tw-bg-opacity: 1;
+  background-color: rgb(3 218 197 / var(--tw-bg-opacity, 1));
+}
+.file\:px-2::file-selector-button{
+  padding-left: 12px;
+  padding-right: 12px;
+}
+.file\:py-1::file-selector-button{
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+.file\:font-barlow::file-selector-button{
+  font-family: Barlow, Inter, sans-serif;
+}
+.file\:font-bold::file-selector-button{
+  font-weight: 800;
+}
+.file\:tracking-wider::file-selector-button{
+  letter-spacing: 0.05em;
+}
+.file\:text-gray-800::file-selector-button{
+  --tw-text-opacity: 1;
+  color: rgb(41 41 41 / var(--tw-text-opacity, 1));
 }
 .hover\:bg-blue-300:hover{
   --tw-bg-opacity: 1;

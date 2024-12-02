@@ -25,12 +25,28 @@
       <form
         action="<%- actionPath %>"
         method="post"
+        enctype="multipart/form-data"
         class="w-full md:w-[600px] flex flex-col gap-2"
       >
         <%- include("../partials/section-heading", {text: `Add file to folder
         ${currentFolder}`}) %>
         <!--  -->
+        <div class="flex flex-col gap-1">
+          <label
+            class="block text-gray-200 font-bold font-barlow tracking-wide"
+            for="file"
+            >select file</label
+          >
 
+          <input
+            class="bg-gray-800 appearance-none border-2 border-gray-600 rounded-md w-full pr-4 text-gray-200 leading-tight focus:outline-none focus:border-blue-300 cursor-pointer file:bg-blue-300 file:border-0 file:m-0 file:px-2 file:py-1 file:border-r-2 file:border-r-gray-400 file:font-barlow file:text-gray-800 file:font-bold file:tracking-wider file:mr-4"
+            type="file"
+            name="file"
+            id="file"
+            accept=".jpg, .jpeg, .png, .svg, .txt, .pdf"
+          />
+          <p class="text-sm text-gray-400">txt, pdf, svg, png, jpg or jpeg</p>
+        </div>
         <!--  -->
         <%- include("../partials/form-button", {text: `Upload file`}) %>
       </form>
