@@ -41,8 +41,6 @@ const createFolderPost = async (
       .status(StatusCodes.CREATED)
       .redirect(`/dashboard/${newFolder.name}`);
   } catch (error) {
-    console.log(error);
-
     return next(error);
   }
 };

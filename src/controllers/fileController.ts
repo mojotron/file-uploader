@@ -6,7 +6,7 @@ const uploadFileGet = (req: Request, res: Response, next: NextFunction) => {
 
   return res.status(StatusCodes.OK).render("pages/dashboard-file-form", {
     currentFolder: folderName,
-    actionPath: ``,
+    actionPath: `/dashboard/${folderName}/upload-file`,
   });
 };
 
@@ -16,11 +16,18 @@ const uploadFilePost = async (
   next: NextFunction
 ) => {
   try {
+    console.log("STEP INTo");
+
     const { folderName } = req.params;
-    console.log("OK");
+    const {} = req.body;
+    const file = req.file;
+
+    console.log(file);
 
     return res.status(StatusCodes.OK).redirect(`/dashboard/${folderName}`);
   } catch (error) {
+    console.log(error);
+
     return next(error);
   }
 };

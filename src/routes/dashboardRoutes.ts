@@ -10,11 +10,16 @@ import {
   deleteFolderPost,
 } from "../controllers/folderController.js";
 // files controller
-import { uploadFileGet } from "../controllers/fileController.js";
+import {
+  uploadFileGet,
+  uploadFilePost,
+} from "../controllers/fileController.js";
 // validators
 import folderValidator from "../config/validators/folderValidator.js";
 // validation middleware
 import { folderValidationMiddleware } from "../middlewares/validationMiddlewares.js";
+//
+import upload from "../config/multer/multerConfig.js";
 
 const router = Router();
 
@@ -41,5 +46,6 @@ router.post("/:folderName/delete", deleteFolderPost);
 
 // files
 router.get("/:folderName/upload-file", uploadFileGet);
+router.post("/:folderName/upload-file", upload.single("file"), uploadFilePost);
 
 export default router;
