@@ -1,9 +1,7 @@
 import { NextFunction, Response, Request } from "express";
 import { validationResult, Result } from "express-validator";
 import { StatusCodes } from "http-status-codes";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../config/prisma/prismaConfig.js";
 
 // helpers
 const getErrorMessages = (result: Result): string[] => {

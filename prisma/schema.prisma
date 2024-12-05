@@ -42,4 +42,14 @@ model Folder {
 
   shared   Boolean @default(false)
   sharedTo User[]
+
+  files File[]
+}
+
+model File {
+  id        String @id @default(uuid())
+  name      String
+  signedUrl String @unique
+  folder    Folder @relation(fields: [folderId], references: [id])
+  folderId  String
 }

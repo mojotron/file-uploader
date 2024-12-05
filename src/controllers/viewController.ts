@@ -6,11 +6,13 @@ const getIndexView = (req: Request, res: Response) => {
 };
 
 const getSignupView = (req: Request, res: Response) => {
-  return res.status(StatusCodes.OK).render("pages/login-form", {
-    actionPath: "/login",
+  return res.status(StatusCodes.OK).render("pages/signup-form", {
+    actionPath: "/signup",
     inputValues: {
-      folderName: "",
-      folderDescription: "",
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
     },
     validationErrors: [],
   });

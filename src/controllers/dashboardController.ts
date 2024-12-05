@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import { PrismaClient, Folder } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { Folder } from "@prisma/client";
+import prisma from "../config/prisma/prismaConfig.js";
 
 const getDashboardView = async (
   req: Request,

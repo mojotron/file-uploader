@@ -1,6 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import supabase from "../config/supabase/supabaseConfig.js";
+import { BadRequestError } from "../errors/index.js";
+import prisma from "../config/prisma/prismaConfig.js";
 
 const uploadFileGet = (req: Request, res: Response, next: NextFunction) => {
   const { folderName } = req.params;
@@ -17,23 +19,45 @@ const uploadFilePost = async (
   next: NextFunction
 ) => {
   try {
-    console.log("STEP INTo");
-
     const { folderName } = req.params;
-    const {} = req.body;
     const file = req.file;
 
-    if (file) {
-      const { data, error } = await supabase.storage
-        .from("file")
-        .upload("new-file", file.buffer, {
-          cacheControl: "3600",
-          upsert: false,
-        });
-      console.log(data, error);
+    if (file === undefined) {
+      throw new BadRequestError(`No file selected!`);
     }
 
-    console.log(file);
+    const { data: uploadData, error: uploadError } = await supabase.storage
+      .from("files")
+      .upload(file.originalname, file.buffer, {
+        cacheControl: "3600",
+        upsert: false,
+      });
+
+    if (uploadError) {
+      throw new BadRequestError(`error uploading file to file storage`);
+    }
+
+    const { data: dataUrl, error: urlError } = await supabase.storage
+      .from("files")
+      .createSignedUrl(file.originalname, 3600);
+
+    if (urlError) {
+      throw new BadRequestError(`error signing url`);
+    }
+
+    const folder = await prisma.folder.findFirst({
+      where: { name: folderName },
+    });
+
+    if (folder === null) throw new BadRequestError("no folder");
+
+    await prisma.file.create({
+      data: {
+        name: file.originalname,
+        folderId: folder.id,
+        signedUrl: dataUrl.signedUrl,
+      },
+    });
 
     return res.status(StatusCodes.OK).redirect(`/dashboard/${folderName}`);
   } catch (error) {

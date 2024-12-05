@@ -1,7 +1,7 @@
 import multer from "multer";
 
-const fileFilterCallback = () => {};
+const storage = multer.memoryStorage();
 
-const upload = multer({ dest: `./uploads` });
+const upload = multer({ storage });
 
 export default upload;

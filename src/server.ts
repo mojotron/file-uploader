@@ -13,6 +13,7 @@ import {
   notFoundMiddleware,
   errorHandlerMiddleware,
 } from "./middlewares/errorMiddlewares.js";
+import prisma from "./config/prisma/prismaConfig.js";
 
 const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -52,4 +53,14 @@ app.use(routes);
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
-app.listen(port, () => console.log(`server running on port ${port}`));
+const startServer = async () => {
+  try {
+    app.listen(port, () => console.log(`server running on port ${port}`));
+  } catch (error) {
+    console.log(error);
+    await prisma.$disconnect();
+    process.exit(1);
+  }
+};
+
+startServer();

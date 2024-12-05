@@ -2,9 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { matchedData } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import bcrypt from "bcrypt";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import prisma from "../config/prisma/prismaConfig.js";
 
 const postSignup = async (req: Request, res: Response, next: NextFunction) => {
   try {
