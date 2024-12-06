@@ -4,6 +4,7 @@ import supabase from "../config/supabase/supabaseConfig.js";
 import { BadRequestError } from "../errors/index.js";
 import prisma from "../config/prisma/prismaConfig.js";
 import { BUCKET_NAME } from "../constants/supabaseConstants.js";
+import fs from "node:fs/promises";
 
 const uploadFileGet = (req: Request, res: Response, next: NextFunction) => {
   const { folderName } = req.params;
@@ -113,4 +114,37 @@ const deleteFilePost = async (
   }
 };
 
-export { uploadFileGet, uploadFilePost, deleteFileGet, deleteFilePost };
+const downloadFile = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderName, fileId } = req.params;
+
+    const file = await prisma.file.findUnique({ where: { id: fileId } });
+    if (file === null) throw new BadRequestError("no file to dw");
+
+    const { data, error: bucketError } = await supabase.storage
+      .from(BUCKET_NAME)
+      .download(`${folderName}/${file.name}`);
+
+    if (bucketError) throw new BadRequestError("bucket error");
+
+    const buffer = Buffer.from(await data?.arrayBuffer());
+
+    console.log(buffer);
+
+    // return res.status(StatusCodes.OK).redirect(`/dashboard/${folderName}`);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export {
+  uploadFileGet,
+  uploadFilePost,
+  deleteFileGet,
+  deleteFilePost,
+  downloadFile,
+};
