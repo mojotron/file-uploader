@@ -8,6 +8,10 @@ params: {
     updatedAt: Date;
     createdById: string;
     shared: boolean;
+    files: {
+      id: string,
+      name: string
+    }
   },
   currentUser: string (id)
 }
@@ -32,16 +36,36 @@ params: {
   </div>
   <% } %>
   <!-- general information -->
-  <header>
-    <%- include("./section-heading", {text: selectedFolderData.name}) %>
-    <!--  -->
-    <%- include("./paragraph", {text: selectedFolderData.description}) %>
+  <header class="flex items-center gap-8">
+    <div>
+      <%- include("./section-heading", {text: selectedFolderData.name}) %>
+      <!--  -->
+      <%- include("./paragraph", {text: selectedFolderData.description}) %>
+    </div>
+    <%- include("./dashboard-link", {path:
+    `/dashboard/${selectedFolderData.name}/upload-file`, text: `upload new
+    file`, iconName: `file-upload`}) %>
   </header>
 
   <!-- FILES -->
   <section>
-    <%- include("./dashboard-link", {path:
-    `/dashboard/${selectedFolderData.name}/upload-file`, text: `upload file`,
-    iconName: `file-upload`}) %>
+    <ul class="space-y-2">
+      <% selectedFolderData.files.forEach((file) => { %>
+      <li
+        class="flex items-center justify-between border border-gray-400 rounded-md px-4 py-2 text-gray-400 hover:border-gray-200 hover:text-gray-200"
+      >
+        <%- file.name %>
+        <div class="flex items-center gap-4">
+          <%- include("./dashboard-link", {path:
+          `/dashboard/${selectedFolderData.name}/${file.id}/download`, text:
+          `download file`, iconName: `file-download`}) %>
+          <!--  -->
+          <%- include("./dashboard-link", {path:
+          `/dashboard/${selectedFolderData.name}/${file.id}/delete`, text:
+          `delete file`, iconName: `file-delete`}) %>
+        </div>
+      </li>
+      <% }) %>
+    </ul>
   </section>
 </main>

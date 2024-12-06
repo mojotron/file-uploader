@@ -25,6 +25,7 @@ const getDashboardView = async (
     if (folderName !== undefined) {
       selectedFolderData = await prisma.folder.findFirst({
         where: { name: folderName },
+        include: { files: { select: { id: true, name: true } } },
       });
     }
 

@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import supabase from "../config/supabase/supabaseConfig.js";
 import { BadRequestError } from "../errors/index.js";
 import prisma from "../config/prisma/prismaConfig.js";
+import { BUCKET_NAME } from "../constants/supabaseConstants.js";
 
 const uploadFileGet = (req: Request, res: Response, next: NextFunction) => {
   const { folderName } = req.params;
@@ -27,8 +28,8 @@ const uploadFilePost = async (
     }
 
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from("files")
-      .upload(file.originalname, file.buffer, {
+      .from(BUCKET_NAME)
+      .upload(`${folderName}/${file.originalname}`, file.buffer, {
         cacheControl: "3600",
         upsert: false,
       });
@@ -38,8 +39,8 @@ const uploadFilePost = async (
     }
 
     const { data: dataUrl, error: urlError } = await supabase.storage
-      .from("files")
-      .createSignedUrl(file.originalname, 3600);
+      .from(BUCKET_NAME)
+      .createSignedUrl(`${folderName}/${file.originalname}`, 3600);
 
     if (urlError) {
       throw new BadRequestError(`error signing url`);
@@ -67,4 +68,49 @@ const uploadFilePost = async (
   }
 };
 
-export { uploadFileGet, uploadFilePost };
+const deleteFileGet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderName, fileId } = req.params;
+
+    const file = await prisma.file.findUnique({ where: { id: fileId } });
+
+    return res.status(StatusCodes.OK).render("pages/dashboard-confirm-box", {
+      actionPath: `/dashboard/${folderName}/${fileId}/delete`,
+      cancelPath: `/dashboard/${folderName}`,
+      heading: `Delete file "${file?.name}"`,
+      message: `You are about to delete this file. This action is permanent. Do you want to proceed?`,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const deleteFilePost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderName, fileId } = req.params;
+
+    const file = await prisma.file.findUnique({ where: { id: fileId } });
+    if (file === null) throw new BadRequestError("no file found to delete");
+
+    const { data, error: bucketError } = await supabase.storage
+      .from(BUCKET_NAME)
+      .remove([`${folderName}/${file.name}`]);
+    if (bucketError) throw new BadRequestError("error deleting file in bucket");
+
+    await prisma.file.delete({ where: { id: file.id } });
+
+    return res.status(StatusCodes.OK).redirect(`/dashboard/${folderName}`);
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export { uploadFileGet, uploadFilePost, deleteFileGet, deleteFilePost };

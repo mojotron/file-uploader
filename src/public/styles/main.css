@@ -601,10 +601,21 @@ video {
 .gap-2{
   gap: 12px;
 }
+.gap-4{
+  gap: 24px;
+}
+.gap-8{
+  gap: 56px;
+}
 .space-x-4 > :not([hidden]) ~ :not([hidden]){
   --tw-space-x-reverse: 0;
   margin-right: calc(24px * var(--tw-space-x-reverse));
   margin-left: calc(24px * calc(1 - var(--tw-space-x-reverse)));
+}
+.space-y-2 > :not([hidden]) ~ :not([hidden]){
+  --tw-space-y-reverse: 0;
+  margin-top: calc(12px * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(12px * var(--tw-space-y-reverse));
 }
 .space-y-4 > :not([hidden]) ~ :not([hidden]){
   --tw-space-y-reverse: 0;
@@ -626,6 +637,10 @@ video {
 .border-blue-300{
   --tw-border-opacity: 1;
   border-color: rgb(3 218 197 / var(--tw-border-opacity, 1));
+}
+.border-gray-400{
+  --tw-border-opacity: 1;
+  border-color: rgb(143 143 143 / var(--tw-border-opacity, 1));
 }
 .border-gray-600{
   --tw-border-opacity: 1;
@@ -780,6 +795,10 @@ video {
   --tw-text-opacity: 1;
   color: rgb(41 41 41 / var(--tw-text-opacity, 1));
 }
+.hover\:border-gray-200:hover{
+  --tw-border-opacity: 1;
+  border-color: rgb(247 247 247 / var(--tw-border-opacity, 1));
+}
 .hover\:bg-blue-300:hover{
   --tw-bg-opacity: 1;
   background-color: rgb(3 218 197 / var(--tw-bg-opacity, 1));
@@ -791,6 +810,10 @@ video {
 .hover\:text-blue-300:hover{
   --tw-text-opacity: 1;
   color: rgb(3 218 197 / var(--tw-text-opacity, 1));
+}
+.hover\:text-gray-200:hover{
+  --tw-text-opacity: 1;
+  color: rgb(247 247 247 / var(--tw-text-opacity, 1));
 }
 .hover\:text-gray-800:hover{
   --tw-text-opacity: 1;

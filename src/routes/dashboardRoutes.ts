@@ -13,6 +13,8 @@ import {
 import {
   uploadFileGet,
   uploadFilePost,
+  deleteFileGet,
+  deleteFilePost,
 } from "../controllers/fileController.js";
 // validators
 import folderValidator from "../config/validators/folderValidator.js";
@@ -44,8 +46,11 @@ router.post(
 router.get("/:folderName/delete", deleteFolderGet);
 router.post("/:folderName/delete", deleteFolderPost);
 
-// files
+// upload file
 router.get("/:folderName/upload-file", uploadFileGet);
 router.post("/:folderName/upload-file", upload.single("file"), uploadFilePost);
+// delete file
+router.get("/:folderName/:fileId/delete", deleteFileGet);
+router.post("/:folderName/:fileId/delete", deleteFilePost);
 
 export default router;
