@@ -125,17 +125,12 @@ const downloadFile = async (
     const file = await prisma.file.findUnique({ where: { id: fileId } });
     if (file === null) throw new BadRequestError("no file to dw");
 
-    const { data, error: bucketError } = await supabase.storage
+    const { data: signedData, error: dataError } = await supabase.storage
       .from(BUCKET_NAME)
-      .download(`${folderName}/${file.name}`);
+      .createSignedUrl(`${folderName}/${file.name}`, 60, { download: true });
+    if (dataError) throw new BadRequestError("error signig data");
 
-    if (bucketError) throw new BadRequestError("bucket error");
-
-    const buffer = Buffer.from(await data?.arrayBuffer());
-
-    console.log(buffer);
-
-    // return res.status(StatusCodes.OK).redirect(`/dashboard/${folderName}`);
+    return res.status(StatusCodes.OK).redirect(signedData.signedUrl);
   } catch (error) {
     return next(error);
   }
