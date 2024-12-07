@@ -47,9 +47,8 @@ model Folder {
 }
 
 model File {
-  id        String @id @default(uuid())
-  name      String
-  signedUrl String @unique
-  folder    Folder @relation(fields: [folderId], references: [id])
-  folderId  String
+  id       String @id @default(uuid())
+  name     String
+  folder   Folder @relation(fields: [folderId], references: [id])
+  folderId String
 }

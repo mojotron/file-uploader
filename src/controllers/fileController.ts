@@ -39,14 +39,6 @@ const uploadFilePost = async (
       throw new BadRequestError(`error uploading file to file storage`);
     }
 
-    const { data: dataUrl, error: urlError } = await supabase.storage
-      .from(BUCKET_NAME)
-      .createSignedUrl(`${folderName}/${file.originalname}`, 3600);
-
-    if (urlError) {
-      throw new BadRequestError(`error signing url`);
-    }
-
     const folder = await prisma.folder.findFirst({
       where: { name: folderName },
     });
@@ -57,7 +49,6 @@ const uploadFilePost = async (
       data: {
         name: file.originalname,
         folderId: folder.id,
-        signedUrl: dataUrl.signedUrl,
       },
     });
 
