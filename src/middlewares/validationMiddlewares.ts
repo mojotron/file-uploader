@@ -69,33 +69,48 @@ const loginValidationMiddleware = (
   return next();
 };
 
-const folderValidationMiddleware = (
+const folderValidationMiddleware = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  const { folderName } = req.params; // for checking if folder is created or updated
-  const isUpdating = folderName !== undefined;
+  try {
+    const { userId } = req.user as { userId: string };
+    const { folderName } = req.params; // for checking if folder is created or updated
+    const isUpdating = folderName !== undefined;
 
-  const result = validationResult(req);
+    const result = validationResult(req);
 
-  if (!result.isEmpty()) {
-    const validationErrors = getErrorMessages(result);
-
-    return res.status(StatusCodes.OK).render("pages/dashboard-folder-form", {
-      actionPath: isUpdating
-        ? `/dashboard/${folderName}/edit`
-        : `/dashboard/create-folder`,
-      update: isUpdating,
-      inputValues: {
-        folderName: req.body.folderName,
-        folderDescription: req.body.folderDescription,
-      },
-      validationErrors,
+    // check if user has folder with same name
+    const folderExists = await prisma.folder.findFirst({
+      where: { name: folderName, createdById: userId },
     });
-  }
 
-  return next();
+    if (!result.isEmpty() || folderExists) {
+      const validationErrors = getErrorMessages(result);
+
+      if (folderExists)
+        validationErrors.push(
+          `current user already have folder with this name`
+        );
+
+      return res.status(StatusCodes.OK).render("pages/dashboard-folder-form", {
+        actionPath: isUpdating
+          ? `/dashboard/${folderName}/edit`
+          : `/dashboard/create-folder`,
+        update: isUpdating,
+        inputValues: {
+          folderName: req.body.folderName,
+          folderDescription: req.body.folderDescription,
+        },
+        validationErrors,
+      });
+    }
+
+    return next();
+  } catch (error) {
+    return next(error);
+  }
 };
 
 export {

@@ -1,10 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
-import supabase from "../config/supabase/supabaseConfig.js";
+// errors
 import { BadRequestError } from "../errors/index.js";
+// config files
 import prisma from "../config/prisma/prismaConfig.js";
+import supabase from "../config/supabase/supabaseConfig.js";
+// constants
 import { BUCKET_NAME } from "../constants/supabaseConstants.js";
-import fs from "node:fs/promises";
 
 const uploadFileGet = (req: Request, res: Response, next: NextFunction) => {
   const { folderName } = req.params;
@@ -21,6 +23,7 @@ const uploadFilePost = async (
   next: NextFunction
 ) => {
   try {
+    const { username } = req.user as { userId: string; username: string };
     const { folderName } = req.params;
     const file = req.file;
 
@@ -30,7 +33,7 @@ const uploadFilePost = async (
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from(BUCKET_NAME)
-      .upload(`${folderName}/${file.originalname}`, file.buffer, {
+      .upload(`${folderName}-${username}/${file.originalname}`, file.buffer, {
         cacheControl: "3600",
         upsert: false,
       });
@@ -87,6 +90,7 @@ const deleteFilePost = async (
   next: NextFunction
 ) => {
   try {
+    const { username } = req.user as { userId: string; username: string };
     const { folderName, fileId } = req.params;
 
     const file = await prisma.file.findUnique({ where: { id: fileId } });
@@ -94,7 +98,7 @@ const deleteFilePost = async (
 
     const { data, error: bucketError } = await supabase.storage
       .from(BUCKET_NAME)
-      .remove([`${folderName}/${file.name}`]);
+      .remove([`${folderName}-${username}/${file.name}`]);
     if (bucketError) throw new BadRequestError("error deleting file in bucket");
 
     await prisma.file.delete({ where: { id: file.id } });
@@ -111,6 +115,7 @@ const downloadFile = async (
   next: NextFunction
 ) => {
   try {
+    const { username } = req.user as { userId: string; username: string };
     const { folderName, fileId } = req.params;
 
     const file = await prisma.file.findUnique({ where: { id: fileId } });
@@ -118,8 +123,10 @@ const downloadFile = async (
 
     const { data: signedData, error: dataError } = await supabase.storage
       .from(BUCKET_NAME)
-      .createSignedUrl(`${folderName}/${file.name}`, 60, { download: true });
-    if (dataError) throw new BadRequestError("error signig data");
+      .createSignedUrl(`${folderName}-${username}/${file.name}`, 60, {
+        download: true,
+      });
+    if (dataError) throw new BadRequestError("error signing data");
 
     return res.status(StatusCodes.OK).redirect(signedData.signedUrl);
   } catch (error) {

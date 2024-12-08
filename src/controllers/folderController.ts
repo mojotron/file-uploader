@@ -2,7 +2,11 @@ import { Request, Response, NextFunction } from "express";
 import { matchedData } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError } from "../errors/index.js";
+// config files
 import prisma from "../config/prisma/prismaConfig.js";
+import supabase from "../config/supabase/supabaseConfig.js";
+// constants
+import { BUCKET_NAME } from "../constants/supabaseConstants.js";
 
 // NOTE! READ FOLDER CRUD OPERATION IS IN DASHBOARD CONTROLLER
 
@@ -113,18 +117,32 @@ const deleteFolderPost = async (
 ) => {
   try {
     const { folderName } = req.params;
-    const { userId } = req.user as { userId: string };
+    const { userId, username } = req.user as {
+      userId: string;
+      username: string;
+    };
 
     const folderData = await prisma.folder.findFirst({
       where: { name: folderName, createdById: userId },
+      include: { files: true },
     });
 
-    if (folderData === null) {
-      throw new BadRequestError(
-        `There is no folder with name "${folderName}"!`
-      );
-    }
+    if (folderData === null) throw new BadRequestError("unkonwn folder");
+    // DELETE ALL FROM SUPABASE
+    const filesToDelete = folderData?.files.map(
+      (file) => `${folderName}-${username}/${file.name}`
+    );
 
+    const { data: storageData, error: storageError } = await supabase.storage
+      .from(BUCKET_NAME)
+      .remove(filesToDelete);
+    if (storageError) throw new BadRequestError("storage error");
+    // DELETE ALL FROM DB FOLDER
+    await prisma.file.deleteMany({
+      where: {
+        id: { in: [...folderData.files.map((file) => file.id)] },
+      },
+    });
     await prisma.folder.delete({
       where: { id: folderData.id },
     });
