@@ -14,27 +14,27 @@
     >
       <%- include("../partials/dashboard-link", {path: `/dashboard/`, text:
       `home`, iconName: `home`}) %>
+      <!--  -->
+      <%- include("../partials/dashboard-link", {path:
+      `/dashboard/${selectedFolderData.name}`, text:
+      `${selectedFolderData.name}`, iconName: `folder-open`}) %>
     </section>
     <main
       class="col-start-5 col-end-13 row-start-2 row-end-13 sm:col-start-4 md:col-start-3 bg-gray-800 p-4"
     >
-      <form
-        action="<%- actionPath %>"
-        method="post"
-        class="w-full md:w-[600px] flex flex-col gap-2 border <%- danger ? "border-red-300" : "border-blue-300" %>  p-4 rounded-md items-center text-center"
-      >
-        <%- include("../partials/section-heading", {text: heading}) %>
-        <!--  -->
-        <%- include("../partials/paragraph", {text: message}) %>
-
-        <!--  -->
-        <div class="space-x-4">
-          <%- include("../partials/cta-link", {path: cancelPath, text:
-          cancelText, inverted: false}) %>
-          <!--  -->
-          <%- include("../partials/form-button", {text: acceptText}) %>
-        </div>
-      </form>
+      <%- include("../partials/cta-link", {path:
+      `/dashboard/${selectedFolderData.name}/shared-options/toggle-shared`,
+      text: `${selectedFolderData.shared ? `Dismantle`: `Create`} shared
+      folder`, inverted: false}) %>
+      <!--  -->
+      <% if(selectedFolderData.shared === true) { %>
+      <section>
+        <h3>Folder is shared with</h3>
+        <form>
+          <h4>Add user by entering email</h4>
+        </form>
+      </section>
+      <% } %>
     </main>
   </body>
 </html>

@@ -107,6 +107,9 @@ const deleteFolderGet = (req: Request, res: Response, next: NextFunction) => {
     cancelPath: `/dashboard/${folderName}`,
     heading: `Delete folder "${folderName}"`,
     message: `You are about to delete this folder and all files in side. This action is permanent. Do you want to proceed?`,
+    cancelText: `Cancel`,
+    acceptText: `Delete`,
+    danger: true,
   });
 };
 

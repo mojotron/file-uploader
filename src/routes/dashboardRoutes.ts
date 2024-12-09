@@ -17,6 +17,12 @@ import {
   deleteFilePost,
   downloadFile,
 } from "../controllers/fileController.js";
+// shared folder controllers
+import {
+  sharedFolderView,
+  sharedFolderToggleSharedGet,
+  sharedFolderToggleSharedPost,
+} from "../controllers/sharedFolderController.js";
 // validators
 import folderValidator from "../config/validators/folderValidator.js";
 // validation middleware
@@ -46,6 +52,17 @@ router.post(
 );
 router.get("/:folderName/delete", deleteFolderGet);
 router.post("/:folderName/delete", deleteFolderPost);
+
+// shared folder
+router.get("/:folderName/shared-options", sharedFolderView);
+router.get(
+  "/:folderName/shared-options/toggle-shared",
+  sharedFolderToggleSharedGet
+);
+router.post(
+  "/:folderName/shared-options/toggle-shared",
+  sharedFolderToggleSharedPost
+);
 
 // upload file
 router.get("/:folderName/upload-file", uploadFileGet);

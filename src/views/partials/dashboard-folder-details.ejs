@@ -30,7 +30,8 @@ params: {
     `/dashboard/${selectedFolderData.name}/delete`, text: `delete folder`,
     iconName: `folder-delete`}) %>
     <!--  -->
-    <%- include("./dashboard-link", {path: ``, text:
+    <%- include("./dashboard-link", {path:
+    `/dashboard/${selectedFolderData.name}/shared-options`, text:
     `${selectedFolderData.shared ? `shared folder options`:`make folder
     shared`}`, iconName: `folder-special`}) %>
   </div>

@@ -78,6 +78,9 @@ const deleteFileGet = async (
       cancelPath: `/dashboard/${folderName}`,
       heading: `Delete file "${file?.name}"`,
       message: `You are about to delete this file. This action is permanent. Do you want to proceed?`,
+      cancelText: `Cancel`,
+      acceptText: `Delete`,
+      danger: true,
     });
   } catch (error) {
     return next(error);

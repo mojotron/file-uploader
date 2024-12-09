@@ -83,8 +83,12 @@ const folderValidationMiddleware = async (
 
     // check if user has folder with same name
     const folderExists = await prisma.folder.findFirst({
-      where: { name: folderName, createdById: userId },
+      where: {
+        AND: [{ name: folderName }, { createdById: userId }],
+      },
     });
+
+    console.log(folderExists);
 
     if (!result.isEmpty() || folderExists) {
       const validationErrors = getErrorMessages(result);
