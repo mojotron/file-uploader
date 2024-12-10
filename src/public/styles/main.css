@@ -688,6 +688,10 @@ video {
   padding-top: 12px;
   padding-bottom: 12px;
 }
+.py-4{
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
 .py-8{
   padding-top: 56px;
   padding-bottom: 56px;
@@ -867,7 +871,15 @@ video {
     grid-column-end: 3;
   }
 
+  .md\:w-\[350px\]{
+    width: 350px;
+  }
+
   .md\:w-\[600px\]{
     width: 600px;
+  }
+
+  .md\:flex-row{
+    flex-direction: row;
   }
 }

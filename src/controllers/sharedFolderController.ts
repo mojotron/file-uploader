@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
+import { matchedData } from "express-validator";
 // config
 import prisma from "../config/prisma/prismaConfig.js";
 // errors
@@ -20,7 +21,31 @@ const sharedFolderView = async (
 
     return res.status(StatusCodes.OK).render("pages/dashboard-shared-options", {
       selectedFolderData,
+      inputValues: {
+        email: "",
+      },
+      validationErrors: [],
     });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const sharedFolderAddCollaborator = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderName } = req.params;
+
+    const { email } = matchedData(req);
+
+    //
+
+    return res
+      .status(StatusCodes.OK)
+      .redirect(`/dashboard/${folderName}/shared-options`);
   } catch (error) {
     return next(error);
   }
@@ -104,4 +129,5 @@ export {
   sharedFolderView,
   sharedFolderToggleSharedGet,
   sharedFolderToggleSharedPost,
+  sharedFolderAddCollaborator,
 };

@@ -117,8 +117,66 @@ const folderValidationMiddleware = async (
   }
 };
 
+const collaboratorValidationMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderName } = req.params;
+    const { userId } = req.user as { userId: string };
+    const { email } = req.body;
+
+    const selectedFolderData = await prisma.folder.findFirst({
+      where: { name: folderName, createdById: userId },
+      include: { sharedTo: true },
+    });
+
+    // check if email is current user, exists or already collaborator
+    const alreadyCollaborator = selectedFolderData?.sharedTo.find(
+      (user) => user.email === email
+    );
+    const collaboratorData = await prisma.user.findUnique({
+      where: { email: email },
+    });
+    const currentUser = collaboratorData?.id === userId;
+
+    const result = validationResult(req);
+
+    if (
+      !result.isEmpty() ||
+      currentUser ||
+      alreadyCollaborator ||
+      collaboratorData === null
+    ) {
+      const validationErrors = getErrorMessages(result);
+      if (currentUser)
+        validationErrors.push("folder creator cannot be collaborator");
+      if (alreadyCollaborator)
+        validationErrors.push("given email is already collaborator");
+      if (collaboratorData === null)
+        validationErrors.push("given email is not application user");
+
+      return res
+        .status(StatusCodes.OK)
+        .render("pages/dashboard-shared-options", {
+          selectedFolderData,
+          inputValues: {
+            email: req.body.email,
+          },
+          validationErrors,
+        });
+    }
+
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export {
   signupValidationMiddleware,
   loginValidationMiddleware,
   folderValidationMiddleware,
+  collaboratorValidationMiddleware,
 };

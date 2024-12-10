@@ -28,11 +28,29 @@
       folder`, inverted: false}) %>
       <!--  -->
       <% if(selectedFolderData.shared === true) { %>
-      <section>
-        <h3>Folder is shared with</h3>
-        <form>
-          <h4>Add user by entering email</h4>
+
+      <section class="py-4 flex flex-col md:flex-row gap-4">
+        <form
+          method="post"
+          action="/dashboard/<%- selectedFolderData.name %>/shared-options/"
+          class="w-full md:w-[350px] flex flex-col gap-2"
+        >
+          <%- include("../partials/input-field", {label: `add collaborator
+          entering email`, nameId: `email`, type: `email`, placeholder:
+          `john_doe@example.com`, value: `${inputValues.email}`}) %>
+          <!--  -->
+          <%- include("../partials/form-errors", {validationErrors}) %>
+          <!--  -->
+          <%- include("../partials/form-button", {text: `Add`}) %>
         </form>
+
+        <div>
+          <h3
+            class="font-barlow font-bold tracking-wider text-gray-200 text-xl"
+          >
+            Folder is shared with
+          </h3>
+        </div>
       </section>
       <% } %>
     </main>

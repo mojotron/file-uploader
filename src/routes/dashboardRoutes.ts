@@ -22,11 +22,16 @@ import {
   sharedFolderView,
   sharedFolderToggleSharedGet,
   sharedFolderToggleSharedPost,
+  sharedFolderAddCollaborator,
 } from "../controllers/sharedFolderController.js";
 // validators
 import folderValidator from "../config/validators/folderValidator.js";
+import collaboratorValidator from "../config/validators/collaboratorValidator.js";
 // validation middleware
-import { folderValidationMiddleware } from "../middlewares/validationMiddlewares.js";
+import {
+  folderValidationMiddleware,
+  collaboratorValidationMiddleware,
+} from "../middlewares/validationMiddlewares.js";
 //
 import upload from "../config/multer/multerConfig.js";
 
@@ -55,6 +60,12 @@ router.post("/:folderName/delete", deleteFolderPost);
 
 // shared folder
 router.get("/:folderName/shared-options", sharedFolderView);
+router.post(
+  "/:folderName/shared-options",
+  collaboratorValidator,
+  collaboratorValidationMiddleware,
+  sharedFolderAddCollaborator
+);
 router.get(
   "/:folderName/shared-options/toggle-shared",
   sharedFolderToggleSharedGet
