@@ -39,6 +39,12 @@ params: {
   <!-- general information -->
   <header class="flex items-center gap-8">
     <div>
+      <% if(selectedFolderData.shared === true) { %>
+      <p class="font-bold font-barlow text-blue-300 tracking-wide">
+        &#9733;shared folder
+      </p>
+      <% } %>
+      <!--  -->
       <%- include("./section-heading", {text: selectedFolderData.name}) %>
       <!--  -->
       <%- include("./paragraph", {text: selectedFolderData.description}) %>

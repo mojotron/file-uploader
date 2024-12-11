@@ -2,6 +2,7 @@ import { NextFunction, Response, Request } from "express";
 import { validationResult, Result } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import prisma from "../config/prisma/prismaConfig.js";
+import { name } from "ejs";
 
 // helpers
 const getErrorMessages = (result: Result): string[] => {
@@ -76,17 +77,20 @@ const folderValidationMiddleware = async (
 ) => {
   try {
     const { userId } = req.user as { userId: string };
-    const { folderName } = req.params; // for checking if folder is created or updated
-    const isUpdating = folderName !== undefined;
+    const { folderName } = req.body; // for checking if folder is created or updated
+    const { folderName: isUpdating } = req.params;
 
     const result = validationResult(req);
 
     // check if user has folder with same name
-    const folderExists = await prisma.folder.findFirst({
-      where: {
-        AND: [{ name: folderName }, { createdById: userId }],
-      },
+    const userData = await prisma.user.findUnique({
+      where: { id: userId },
+      include: { folders: true, sharedFolders: true },
     });
+
+    const folderExists = userData?.folders.find(
+      (folder) => folder.name === folderName
+    );
 
     console.log(folderExists);
 

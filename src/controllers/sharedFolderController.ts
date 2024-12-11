@@ -38,10 +38,14 @@ const sharedFolderAddCollaborator = async (
 ) => {
   try {
     const { folderName } = req.params;
-
     const { email } = matchedData(req);
 
-    //
+    const collaboratorId = await prisma.user.findUnique({
+      where: { email },
+      select: { id: true },
+    });
+
+    console.log(collaboratorId);
 
     return res
       .status(StatusCodes.OK)
