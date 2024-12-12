@@ -4,7 +4,7 @@ import { matchedData } from "express-validator";
 // config
 import prisma from "../config/prisma/prismaConfig.js";
 // errors
-import BadRequestError from "../errors/BadRequestError.js";
+import { BadRequestError } from "../errors/index.js";
 
 const sharedFolderView = async (
   req: Request,
@@ -39,18 +39,38 @@ const sharedFolderAddCollaborator = async (
   try {
     const { folderName } = req.params;
     const { email } = matchedData(req);
+    const { userId } = req.user as { userId: string };
 
-    const collaboratorId = await prisma.user.findUnique({
+    const collaboratorData = await prisma.user.findUnique({
       where: { email },
-      select: { id: true },
     });
 
-    console.log(collaboratorId);
+    if (collaboratorData === null) throw new BadRequestError("unknown user");
+
+    const selectedFolderData = await prisma.folder.findFirst({
+      where: { name: folderName, createdById: userId },
+    });
+
+    console.log(selectedFolderData?.id);
+
+    if (selectedFolderData === null)
+      throw new BadRequestError("unknown folder");
+
+    await prisma.user.update({
+      where: { id: collaboratorData.id },
+      data: {
+        sharedFolders: {
+          create: [selectedFolderData],
+        },
+      },
+    });
 
     return res
       .status(StatusCodes.OK)
       .redirect(`/dashboard/${folderName}/shared-options`);
   } catch (error) {
+    console.log(error);
+
     return next(error);
   }
 };
