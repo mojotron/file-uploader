@@ -9,7 +9,8 @@
   <body class="w-[100vw] h-[100vh] bg-gray-800 grid grid-cols-12 grid-rows-12">
     <%- include("../partials/dashboard-header") %>
     <!--  -->
-    <%- include("../partials/dashboard-aside", {userFolders, selectedFolder}) %>
+    <%- include("../partials/dashboard-aside", {userFolders, sharedFolders,
+    selectedFolder}) %>
     <!--  -->
     <% if(selectedFolderData !== null) { %>
     <!--  -->

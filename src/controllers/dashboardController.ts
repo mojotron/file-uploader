@@ -11,14 +11,20 @@ const getDashboardView = async (
   try {
     const { folderName } = req.params; // selected folder
     const { userId } = req.user as { userId: string };
-    // get all folders
-    const userFolders = await prisma.folder.findMany({
-      where: { createdById: userId },
-      select: {
-        id: true,
-        name: true,
+    //
+    const currentUserData = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        folders: {
+          select: { name: true, id: true },
+        },
+        sharedFolders: {
+          select: { name: true, id: true },
+        },
       },
     });
+
+    // console.log(currentUserData);
 
     let selectedFolderData: Folder | null = null;
 
@@ -29,13 +35,10 @@ const getDashboardView = async (
       });
     }
 
-    // const sharedFolders = await prisma.folder.findMany({
-    //   where: { sharedTo: {} },
-    // });
-
     return res.status(StatusCodes.OK).render("pages/dashboard", {
       currentUser: userId,
-      userFolders,
+      userFolders: currentUserData?.folders,
+      sharedFolders: currentUserData?.sharedFolders,
       selectedFolder: folderName || "",
       selectedFolderData,
     });

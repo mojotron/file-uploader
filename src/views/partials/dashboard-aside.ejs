@@ -1,6 +1,7 @@
 <!-- 
 params: {
   userFolders: [{id: string, name: string}] -> name of folders
+  sharedFolders: [{id: string, name: string}] -> name of folders
   selectedFolder: unique folderId
 }
 id is used for selecting correct folder
@@ -32,5 +33,12 @@ id is used for selecting correct folder
     <h3 class="font-barlow font-bold tracking-wider text-gray-400">
       shared folders
     </h3>
+    <% sharedFolders.forEach((folder) => { %>
+    <!--  -->
+    <%- include("./dashboard-link", {path: `/dashboard/${folder.name}`, text:
+    `${folder.name}`, iconName: `${folder.name === selectedFolder ?
+    "folder-open" : "folder-close"}`}) %>
+    <!--  -->
+    <% }) %>
   </div>
 </aside>

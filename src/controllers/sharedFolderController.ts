@@ -56,11 +56,13 @@ const sharedFolderAddCollaborator = async (
     if (selectedFolderData === null)
       throw new BadRequestError("unknown folder");
 
-    await prisma.user.update({
-      where: { id: collaboratorData.id },
+    await prisma.folder.update({
+      where: { id: selectedFolderData.id },
       data: {
-        sharedFolders: {
-          create: [selectedFolderData],
+        sharedTo: {
+          connect: {
+            id: collaboratorData.id,
+          },
         },
       },
     });
