@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
 import { Folder } from "@prisma/client";
 import prisma from "../config/prisma/prismaConfig.js";
+import BadRequestError from "../errors/BadRequestError.js";
 
 const getDashboardView = async (
   req: Request,
@@ -9,7 +10,7 @@ const getDashboardView = async (
   next: NextFunction
 ) => {
   try {
-    const { folderName } = req.params; // selected folder
+    const { folderId } = req.params; // selected folder
     const { userId } = req.user as { userId: string };
     //
     const currentUserData = await prisma.user.findUnique({
@@ -24,25 +25,38 @@ const getDashboardView = async (
       },
     });
 
-    // console.log(currentUserData);
-
     let selectedFolderData: Folder | null = null;
 
-    if (folderName !== undefined) {
-      selectedFolderData = await prisma.folder.findFirst({
-        where: { name: folderName },
-        include: { files: { select: { id: true, name: true } } },
-      });
+    if (folderId !== undefined) {
+      const currentUserIsCreator = currentUserData?.folders.find(
+        (folder) => folder.id === folderId
+      );
+      const currentUserIsCollaborator = currentUserData?.sharedFolders.find(
+        (folder) => folder.id === folderId
+      );
+
+      if (currentUserIsCreator || currentUserIsCollaborator) {
+        selectedFolderData = await prisma.folder.findUnique({
+          where: { id: folderId },
+          include: { files: { select: { id: true, name: true } } },
+        });
+      } else {
+        throw new BadRequestError(
+          "selected folder is not connected with current user"
+        );
+      }
     }
 
     return res.status(StatusCodes.OK).render("pages/dashboard", {
       currentUser: userId,
       userFolders: currentUserData?.folders,
       sharedFolders: currentUserData?.sharedFolders,
-      selectedFolder: folderName || "",
+      selectedFolder: folderId || "",
       selectedFolderData,
     });
   } catch (error) {
+    console.log("DASHBOARD ERROR");
+
     console.log(error);
 
     return next(error);

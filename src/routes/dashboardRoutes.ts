@@ -47,7 +47,7 @@ router.post(
   folderValidationMiddleware,
   createFolderPost
 );
-router.get("/:folderName", getDashboardView);
+router.get("/:folderId", getDashboardView);
 router.get("/:folderName/edit", editFolderGet);
 router.post(
   "/:folderName/edit",

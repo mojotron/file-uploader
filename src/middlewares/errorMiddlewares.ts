@@ -21,7 +21,9 @@ const errorHandlerMiddleware = (
   next: NextFunction
 ) => {
   if (err instanceof BadRequestError) {
-    return res.sendStatus(err.statusCode).render("pages/error", {
+    console.log("bed request error handler");
+
+    return res.status(err.statusCode).render("pages/dashboard-error", {
       heading: `Unable to process request`,
       subheading: `error occurred...`,
       message: err.message,
