@@ -536,6 +536,9 @@ video {
   margin-left: 12px;
   margin-right: 12px;
 }
+.mb-2{
+  margin-bottom: 12px;
+}
 .mt-2{
   margin-top: 12px;
 }

@@ -17,6 +17,14 @@ const sharedFolderView = async (
 
     const selectedFolderData = await prisma.folder.findUnique({
       where: { id: folderId },
+      include: {
+        sharedTo: {
+          select: {
+            username: true,
+            id: true,
+          },
+        },
+      },
     });
 
     if (selectedFolderData?.createdById !== userId)
@@ -53,6 +61,8 @@ const sharedFolderAddCollaborator = async (
     const selectedFolderData = await prisma.folder.findUnique({
       where: { id: folderId },
     });
+
+    console.log(selectedFolderData);
 
     if (selectedFolderData === null)
       throw new BadRequestError("unknown folder");
@@ -156,9 +166,33 @@ const sharedFolderToggleSharedPost = async (
   }
 };
 
+const sharedFolderRemoveCollaboratorGet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const sharedFolderRemoveCollaboratorPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export {
   sharedFolderView,
   sharedFolderToggleSharedGet,
   sharedFolderToggleSharedPost,
   sharedFolderAddCollaborator,
+  sharedFolderRemoveCollaboratorGet,
+  sharedFolderRemoveCollaboratorPost,
 };

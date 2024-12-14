@@ -32,7 +32,7 @@
       <section class="py-4 flex flex-col md:flex-row gap-4">
         <form
           method="post"
-          action="/dashboard/<%- selectedFolderData.name %>/shared-options/"
+          action="/dashboard/<%- selectedFolderData.id %>/shared-options/"
           class="w-full md:w-[350px] flex flex-col gap-2"
         >
           <%- include("../partials/input-field", {label: `add collaborator
@@ -46,10 +46,22 @@
 
         <div>
           <h3
-            class="font-barlow font-bold tracking-wider text-gray-200 text-xl"
+            class="font-barlow font-bold tracking-wider text-gray-200 text-xl mb-2"
           >
             Folder is shared with
           </h3>
+          <ul class="space-y-2">
+            <% selectedFolderData.sharedTo.forEach((user) => { %>
+            <li
+              class="text-gray-400 flex items-center justify-between border-2 border-gray-400 rounded-md px-4 hover:text-gray-200 hover:border-gray-200"
+            >
+              <span> <%- user.username %> </span>
+              <%- include("../partials/dashboard-link",
+              {path:`/dashboard/${selectedFolderData.id}/remove-user/${user.id}`,
+              iconName: `user-remove`, text: `remove user`}) %>
+            </li>
+            <% }) %>
+          </ul>
         </div>
       </section>
       <% } %>

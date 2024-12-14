@@ -23,6 +23,8 @@ import {
   sharedFolderToggleSharedGet,
   sharedFolderToggleSharedPost,
   sharedFolderAddCollaborator,
+  sharedFolderRemoveCollaboratorGet,
+  sharedFolderRemoveCollaboratorPost,
 } from "../controllers/sharedFolderController.js";
 // validators
 import folderValidator from "../config/validators/folderValidator.js";
@@ -73,6 +75,14 @@ router.get(
 router.post(
   "/:folderId/shared-options/toggle-shared",
   sharedFolderToggleSharedPost
+);
+router.get(
+  "/:folderId/shared-options/remove-user/:userId",
+  sharedFolderRemoveCollaboratorGet
+);
+router.post(
+  "/:folderId/shared-options/remove-user/:userId",
+  sharedFolderRemoveCollaboratorPost
 );
 
 // upload file
