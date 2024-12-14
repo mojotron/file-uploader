@@ -50,8 +50,8 @@ params: {
       <%- include("./paragraph", {text: selectedFolderData.description}) %>
     </div>
     <%- include("./dashboard-link", {path:
-    `/dashboard/${selectedFolderData.name}/upload-file`, text: `upload new
-    file`, iconName: `file-upload`}) %>
+    `/dashboard/${selectedFolderData.id}/upload-file`, text: `upload new file`,
+    iconName: `file-upload`}) %>
   </header>
 
   <!-- FILES -->
@@ -64,12 +64,12 @@ params: {
         <%- file.name %>
         <div class="flex items-center gap-4">
           <%- include("./dashboard-link", {path:
-          `/dashboard/${selectedFolderData.name}/${file.id}/download`, text:
+          `/dashboard/${selectedFolderData.id}/${file.id}/download`, text:
           `download file`, iconName: `file-download`}) %>
           <!--  -->
           <%- include("./dashboard-link", {path:
-          `/dashboard/${selectedFolderData.name}/${file.id}/delete`, text:
-          `delete file`, iconName: `file-delete`}) %>
+          `/dashboard/${selectedFolderData.id}/${file.id}/delete`, text: `delete
+          file`, iconName: `file-delete`}) %>
         </div>
       </li>
       <% }) %>

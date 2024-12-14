@@ -8,13 +8,26 @@ import supabase from "../config/supabase/supabaseConfig.js";
 // constants
 import { BUCKET_NAME } from "../constants/supabaseConstants.js";
 
-const uploadFileGet = (req: Request, res: Response, next: NextFunction) => {
-  const { folderName } = req.params;
+const uploadFileGet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderId } = req.params;
 
-  return res.status(StatusCodes.OK).render("pages/dashboard-file-form", {
-    currentFolder: folderName,
-    actionPath: `/dashboard/${folderName}/upload-file`,
-  });
+    const folderData = await prisma.folder.findUnique({
+      where: { id: folderId },
+      select: { name: true },
+    });
+
+    return res.status(StatusCodes.OK).render("pages/dashboard-file-form", {
+      currentFolder: folderData?.name,
+      actionPath: `/dashboard/${folderId}/upload-file`,
+    });
+  } catch (error) {
+    return next(error);
+  }
 };
 
 const uploadFilePost = async (
@@ -24,38 +37,42 @@ const uploadFilePost = async (
 ) => {
   try {
     const { username } = req.user as { userId: string; username: string };
-    const { folderName } = req.params;
+    const { folderId } = req.params;
     const file = req.file;
 
     if (file === undefined) {
       throw new BadRequestError(`No file selected!`);
     }
 
+    const folderData = await prisma.folder.findUnique({
+      where: { id: folderId },
+    });
+
+    if (folderData === null) throw new BadRequestError(`No folder found!`);
+
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from(BUCKET_NAME)
-      .upload(`${folderName}-${username}/${file.originalname}`, file.buffer, {
-        cacheControl: "3600",
-        upsert: false,
-      });
+      .upload(
+        `${folderData.name}-${username}/${file.originalname}`,
+        file.buffer,
+        {
+          cacheControl: "3600",
+          upsert: false,
+        }
+      );
 
     if (uploadError) {
       throw new BadRequestError(`error uploading file to file storage`);
     }
 
-    const folder = await prisma.folder.findFirst({
-      where: { name: folderName },
-    });
-
-    if (folder === null) throw new BadRequestError("no folder");
-
     await prisma.file.create({
       data: {
         name: file.originalname,
-        folderId: folder.id,
+        folderId: folderData.id,
       },
     });
 
-    return res.status(StatusCodes.OK).redirect(`/dashboard/${folderName}`);
+    return res.status(StatusCodes.OK).redirect(`/dashboard/${folderData.id}`);
   } catch (error) {
     console.log(error);
 
@@ -69,13 +86,16 @@ const deleteFileGet = async (
   next: NextFunction
 ) => {
   try {
-    const { folderName, fileId } = req.params;
+    const { folderId, fileId } = req.params;
 
-    const file = await prisma.file.findUnique({ where: { id: fileId } });
+    const file = await prisma.file.findUnique({
+      where: { id: fileId },
+      select: { name: true },
+    });
 
     return res.status(StatusCodes.OK).render("pages/dashboard-confirm-box", {
-      actionPath: `/dashboard/${folderName}/${fileId}/delete`,
-      cancelPath: `/dashboard/${folderName}`,
+      actionPath: `/dashboard/${folderId}/${fileId}/delete`,
+      cancelPath: `/dashboard/${folderId}`,
       heading: `Delete file "${file?.name}"`,
       message: `You are about to delete this file. This action is permanent. Do you want to proceed?`,
       cancelText: `Cancel`,
@@ -94,19 +114,23 @@ const deleteFilePost = async (
 ) => {
   try {
     const { username } = req.user as { userId: string; username: string };
-    const { folderName, fileId } = req.params;
+    const { folderId, fileId } = req.params;
 
-    const file = await prisma.file.findUnique({ where: { id: fileId } });
-    if (file === null) throw new BadRequestError("no file found to delete");
+    const fileData = await prisma.file.findUnique({
+      where: { id: fileId },
+      include: { folder: true },
+    });
+
+    if (fileData === null) throw new BadRequestError("no file found to delete");
 
     const { data, error: bucketError } = await supabase.storage
       .from(BUCKET_NAME)
-      .remove([`${folderName}-${username}/${file.name}`]);
+      .remove([`${fileData.folder.name}-${username}/${fileData.name}`]);
     if (bucketError) throw new BadRequestError("error deleting file in bucket");
 
-    await prisma.file.delete({ where: { id: file.id } });
+    await prisma.file.delete({ where: { id: fileData.id } });
 
-    return res.status(StatusCodes.OK).redirect(`/dashboard/${folderName}`);
+    return res.status(StatusCodes.OK).redirect(`/dashboard/${folderId}`);
   } catch (error) {
     return next(error);
   }
@@ -119,16 +143,23 @@ const downloadFile = async (
 ) => {
   try {
     const { username } = req.user as { userId: string; username: string };
-    const { folderName, fileId } = req.params;
+    const { folderId, fileId } = req.params;
 
-    const file = await prisma.file.findUnique({ where: { id: fileId } });
-    if (file === null) throw new BadRequestError("no file to dw");
+    const fileData = await prisma.file.findUnique({
+      where: { id: fileId },
+      include: { folder: true },
+    });
+    if (fileData === null) throw new BadRequestError("no file to dw");
 
     const { data: signedData, error: dataError } = await supabase.storage
       .from(BUCKET_NAME)
-      .createSignedUrl(`${folderName}-${username}/${file.name}`, 60, {
-        download: true,
-      });
+      .createSignedUrl(
+        `${fileData.folder.name}-${username}/${fileData.name}`,
+        60,
+        {
+          download: true,
+        }
+      );
     if (dataError) throw new BadRequestError("error signing data");
 
     return res.status(StatusCodes.OK).redirect(signedData.signedUrl);

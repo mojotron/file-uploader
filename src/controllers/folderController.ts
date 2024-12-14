@@ -91,12 +91,8 @@ const editFolderPost = async (
       where: { id: folderId },
     });
 
-    console.log(folderData);
-
     if (folderData?.createdById !== userId)
       throw new BadRequestError("current user is not creator");
-
-    console.log("hello");
 
     const updateValues: { [key: string]: string } = {};
 

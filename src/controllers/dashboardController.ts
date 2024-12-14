@@ -55,10 +55,6 @@ const getDashboardView = async (
       selectedFolderData,
     });
   } catch (error) {
-    console.log("DASHBOARD ERROR");
-
-    console.log(error);
-
     return next(error);
   }
 };
