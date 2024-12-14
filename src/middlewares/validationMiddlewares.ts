@@ -78,7 +78,7 @@ const folderValidationMiddleware = async (
   try {
     const { userId } = req.user as { userId: string };
     const { folderName } = req.body; // for checking if folder is created or updated
-    const { folderName: isUpdating } = req.params;
+    const { folderId } = req.params;
 
     const result = validationResult(req);
 
@@ -92,8 +92,6 @@ const folderValidationMiddleware = async (
       (folder) => folder.name === folderName
     );
 
-    console.log(folderExists);
-
     if (!result.isEmpty() || folderExists) {
       const validationErrors = getErrorMessages(result);
 
@@ -102,9 +100,11 @@ const folderValidationMiddleware = async (
           `current user already have folder with this name`
         );
 
+      const isUpdating = folderId !== undefined;
+
       return res.status(StatusCodes.OK).render("pages/dashboard-folder-form", {
         actionPath: isUpdating
-          ? `/dashboard/${folderName}/edit`
+          ? `/dashboard/${folderId}/edit`
           : `/dashboard/create-folder`,
         update: isUpdating,
         inputValues: {
@@ -127,12 +127,12 @@ const collaboratorValidationMiddleware = async (
   next: NextFunction
 ) => {
   try {
-    const { folderName } = req.params;
+    const { folderId } = req.params;
     const { userId } = req.user as { userId: string };
     const { email } = req.body;
 
-    const selectedFolderData = await prisma.folder.findFirst({
-      where: { name: folderName, createdById: userId },
+    const selectedFolderData = await prisma.folder.findUnique({
+      where: { id: folderId },
       include: { sharedTo: true },
     });
 

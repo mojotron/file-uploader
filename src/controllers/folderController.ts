@@ -41,7 +41,7 @@ const createFolderPost = async (
 
     return res
       .status(StatusCodes.CREATED)
-      .redirect(`/dashboard/${newFolder.name}`);
+      .redirect(`/dashboard/${newFolder.id}`);
   } catch (error) {
     return next(error);
   }
@@ -53,15 +53,18 @@ const editFolderGet = async (
   next: NextFunction
 ) => {
   try {
-    const { folderName } = req.params;
+    const { folderId } = req.params;
     const { userId } = req.user as { userId: string };
 
-    const folderData = await prisma.folder.findFirst({
-      where: { name: folderName, createdById: userId },
+    const folderData = await prisma.folder.findUnique({
+      where: { id: folderId },
     });
 
+    if (folderData?.createdById !== userId)
+      throw new BadRequestError("current user is not creator");
+
     return res.status(StatusCodes.OK).render("pages/dashboard-folder-form", {
-      actionPath: `/dashboard/${folderName}/edit`,
+      actionPath: `/dashboard/${folderId}/edit`,
       update: true,
       inputValues: {
         folderName: folderData?.name,
@@ -80,37 +83,62 @@ const editFolderPost = async (
   next: NextFunction
 ) => {
   try {
-    const oldFolderName = req.params.folderName as string;
+    const { folderId } = req.params;
     const { folderName, folderDescription } = matchedData(req);
     const { userId } = req.user as { userId: string };
 
-    const folderData = await prisma.folder.findFirst({
-      where: { name: oldFolderName, createdById: userId },
+    const folderData = await prisma.folder.findUnique({
+      where: { id: folderId },
     });
+
+    console.log(folderData);
+
+    if (folderData?.createdById !== userId)
+      throw new BadRequestError("current user is not creator");
+
+    console.log("hello");
+
+    const updateValues: { [key: string]: string } = {};
+
+    if (folderName !== folderData.name) updateValues["name"] = folderName;
+    if (folderDescription !== folderData.description)
+      updateValues["description"] = folderDescription;
 
     await prisma.folder.update({
       where: { id: folderData?.id },
-      data: { name: folderName, description: folderDescription },
+      data: updateValues,
     });
 
-    return res.status(StatusCodes.OK).redirect(`/dashboard/${folderName}`);
+    return res.status(StatusCodes.OK).redirect(`/dashboard/${folderId}`);
   } catch (error) {
     return next(error);
   }
 };
 
-const deleteFolderGet = (req: Request, res: Response, next: NextFunction) => {
-  const { folderName } = req.params;
+const deleteFolderGet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderId } = req.params;
 
-  return res.status(StatusCodes.OK).render("pages/dashboard-confirm-box", {
-    actionPath: `/dashboard/${folderName}/delete`,
-    cancelPath: `/dashboard/${folderName}`,
-    heading: `Delete folder "${folderName}"`,
-    message: `You are about to delete this folder and all files in side. This action is permanent. Do you want to proceed?`,
-    cancelText: `Cancel`,
-    acceptText: `Delete`,
-    danger: true,
-  });
+    const folderData = await prisma.folder.findUnique({
+      where: { id: folderId },
+    });
+
+    return res.status(StatusCodes.OK).render("pages/dashboard-confirm-box", {
+      actionPath: `/dashboard/${folderId}/delete`,
+      cancelPath: `/dashboard/${folderId}`,
+      heading: `Delete folder "${folderData?.name}"`,
+      message: `You are about to delete this folder and all files in side. This action is permanent. Do you want to proceed?`,
+      cancelText: `Cancel`,
+      acceptText: `Delete`,
+      danger: true,
+    });
+  } catch (error) {
+    return next(error);
+  }
 };
 
 const deleteFolderPost = async (
@@ -119,33 +147,39 @@ const deleteFolderPost = async (
   next: NextFunction
 ) => {
   try {
-    const { folderName } = req.params;
+    const { folderId } = req.params;
     const { userId, username } = req.user as {
       userId: string;
       username: string;
     };
 
-    const folderData = await prisma.folder.findFirst({
-      where: { name: folderName, createdById: userId },
-      include: { files: true },
+    const folderData = await prisma.folder.findUnique({
+      where: { id: folderId },
+      include: { createdBy: true, files: true },
     });
 
     if (folderData === null) throw new BadRequestError("unkonwn folder");
     // DELETE ALL FROM SUPABASE
-    const filesToDelete = folderData?.files.map(
-      (file) => `${folderName}-${username}/${file.name}`
+    const filesToDelete = folderData.files.map(
+      (file) =>
+        `${folderData.name}-${folderData.createdBy.username}/${file.name}`
     );
 
-    const { data: storageData, error: storageError } = await supabase.storage
-      .from(BUCKET_NAME)
-      .remove(filesToDelete);
-    if (storageError) throw new BadRequestError("storage error");
-    // DELETE ALL FROM DB FOLDER
-    await prisma.file.deleteMany({
-      where: {
-        id: { in: [...folderData.files.map((file) => file.id)] },
-      },
-    });
+    if (filesToDelete.length > 0) {
+      const { data: storageData, error: storageError } = await supabase.storage
+        .from(BUCKET_NAME)
+        .remove(filesToDelete);
+      if (storageError) console.log(storageError);
+
+      if (storageError) throw new BadRequestError("storage error");
+      // DELETE ALL FROM DB FOLDER
+      await prisma.file.deleteMany({
+        where: {
+          id: { in: [...folderData.files.map((file) => file.id)] },
+        },
+      });
+    }
+
     await prisma.folder.delete({
       where: { id: folderData.id },
     });

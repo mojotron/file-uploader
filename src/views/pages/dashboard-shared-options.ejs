@@ -16,16 +16,16 @@
       `home`, iconName: `home`}) %>
       <!--  -->
       <%- include("../partials/dashboard-link", {path:
-      `/dashboard/${selectedFolderData.name}`, text:
-      `${selectedFolderData.name}`, iconName: `folder-open`}) %>
+      `/dashboard/${selectedFolderData.id}`, text: `${selectedFolderData.name}`,
+      iconName: `folder-open`}) %>
     </section>
     <main
       class="col-start-5 col-end-13 row-start-2 row-end-13 sm:col-start-4 md:col-start-3 bg-gray-800 p-4"
     >
       <%- include("../partials/cta-link", {path:
-      `/dashboard/${selectedFolderData.name}/shared-options/toggle-shared`,
-      text: `${selectedFolderData.shared ? `Dismantle`: `Create`} shared
-      folder`, inverted: false}) %>
+      `/dashboard/${selectedFolderData.id}/shared-options/toggle-shared`, text:
+      `${selectedFolderData.shared ? `Dismantle`: `Create`} shared folder`,
+      inverted: false}) %>
       <!--  -->
       <% if(selectedFolderData.shared === true) { %>
 

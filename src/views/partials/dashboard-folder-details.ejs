@@ -23,15 +23,15 @@ params: {
   <% if(currentUser === selectedFolderData.createdById) { %>
   <div class="flex items-center gap-2">
     <%- include("./dashboard-link", {path:
-    `/dashboard/${selectedFolderData.name}/edit`, text: `edit folder`, iconName:
+    `/dashboard/${selectedFolderData.id}/edit`, text: `edit folder`, iconName:
     `folder-update`}) %>
     <!--  -->
     <%- include("./dashboard-link", {path:
-    `/dashboard/${selectedFolderData.name}/delete`, text: `delete folder`,
+    `/dashboard/${selectedFolderData.id}/delete`, text: `delete folder`,
     iconName: `folder-delete`}) %>
     <!--  -->
     <%- include("./dashboard-link", {path:
-    `/dashboard/${selectedFolderData.name}/shared-options`, text:
+    `/dashboard/${selectedFolderData.id}/shared-options`, text:
     `${selectedFolderData.shared ? `shared folder options`:`make folder
     shared`}`, iconName: `folder-special`}) %>
   </div>

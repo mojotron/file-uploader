@@ -48,40 +48,40 @@ router.post(
   createFolderPost
 );
 router.get("/:folderId", getDashboardView);
-router.get("/:folderName/edit", editFolderGet);
+router.get("/:folderId/edit", editFolderGet);
 router.post(
-  "/:folderName/edit",
+  "/:folderId/edit",
   folderValidator,
   folderValidationMiddleware,
   editFolderPost
 );
-router.get("/:folderName/delete", deleteFolderGet);
-router.post("/:folderName/delete", deleteFolderPost);
+router.get("/:folderId/delete", deleteFolderGet);
+router.post("/:folderId/delete", deleteFolderPost);
 
 // shared folder
-router.get("/:folderName/shared-options", sharedFolderView);
+router.get("/:folderId/shared-options", sharedFolderView);
 router.post(
-  "/:folderName/shared-options",
+  "/:folderId/shared-options",
   collaboratorValidator,
   collaboratorValidationMiddleware,
   sharedFolderAddCollaborator
 );
 router.get(
-  "/:folderName/shared-options/toggle-shared",
+  "/:folderId/shared-options/toggle-shared",
   sharedFolderToggleSharedGet
 );
 router.post(
-  "/:folderName/shared-options/toggle-shared",
+  "/:folderId/shared-options/toggle-shared",
   sharedFolderToggleSharedPost
 );
 
 // upload file
-router.get("/:folderName/upload-file", uploadFileGet);
-router.post("/:folderName/upload-file", upload.single("file"), uploadFilePost);
+router.get("/:folderId/upload-file", uploadFileGet);
+router.post("/:folderId/upload-file", upload.single("file"), uploadFilePost);
 // delete file
-router.get("/:folderName/:fileId/delete", deleteFileGet);
-router.post("/:folderName/:fileId/delete", deleteFilePost);
+router.get("/:folderId/:fileId/delete", deleteFileGet);
+router.post("/:folderId/:fileId/delete", deleteFilePost);
 // download file
-router.get("/:folderName/:fileId/download", downloadFile);
+router.get("/:folderId/:fileId/download", downloadFile);
 
 export default router;

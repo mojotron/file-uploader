@@ -12,12 +12,15 @@ const sharedFolderView = async (
   next: NextFunction
 ) => {
   try {
-    const { folderName } = req.params;
+    const { folderId } = req.params;
     const { userId } = req.user as { userId: string };
 
-    const selectedFolderData = await prisma.folder.findFirst({
-      where: { name: folderName, createdById: userId },
+    const selectedFolderData = await prisma.folder.findUnique({
+      where: { id: folderId },
     });
+
+    if (selectedFolderData?.createdById !== userId)
+      throw new BadRequestError("current user error");
 
     return res.status(StatusCodes.OK).render("pages/dashboard-shared-options", {
       selectedFolderData,
@@ -37,7 +40,7 @@ const sharedFolderAddCollaborator = async (
   next: NextFunction
 ) => {
   try {
-    const { folderName } = req.params;
+    const { folderId } = req.params;
     const { email } = matchedData(req);
     const { userId } = req.user as { userId: string };
 
@@ -47,11 +50,9 @@ const sharedFolderAddCollaborator = async (
 
     if (collaboratorData === null) throw new BadRequestError("unknown user");
 
-    const selectedFolderData = await prisma.folder.findFirst({
-      where: { name: folderName, createdById: userId },
+    const selectedFolderData = await prisma.folder.findUnique({
+      where: { id: folderId },
     });
-
-    console.log(selectedFolderData?.id);
 
     if (selectedFolderData === null)
       throw new BadRequestError("unknown folder");
@@ -69,7 +70,7 @@ const sharedFolderAddCollaborator = async (
 
     return res
       .status(StatusCodes.OK)
-      .redirect(`/dashboard/${folderName}/shared-options`);
+      .redirect(`/dashboard/${folderId}/shared-options`);
   } catch (error) {
     console.log(error);
 
@@ -83,17 +84,20 @@ const sharedFolderToggleSharedGet = async (
   next: NextFunction
 ) => {
   try {
-    const { folderName } = req.params;
+    const { folderId } = req.params;
     const { userId } = req.user as { userId: string };
 
-    const selectedFolderData = await prisma.folder.findFirst({
-      where: { name: folderName, createdById: userId },
+    const selectedFolderData = await prisma.folder.findUnique({
+      where: { id: folderId },
     });
+
+    if (selectedFolderData?.createdById !== userId)
+      throw new BadRequestError("not current user");
 
     if (selectedFolderData?.shared === true) {
       return res.status(StatusCodes.OK).render("pages/dashboard-confirm-box", {
-        actionPath: `/dashboard/${folderName}/shared-options/toggle-shared`,
-        cancelPath: `/dashboard/${selectedFolderData?.name}/shared-options`,
+        actionPath: `/dashboard/${folderId}/shared-options/toggle-shared`,
+        cancelPath: `/dashboard/${folderId}/shared-options`,
         heading: `Dismantle "${selectedFolderData?.name}" folder shared option`,
         message: `You are about to dismantle shared option for this folder. Collaboration will stop and all files will be destroyed. This action is permanent!`,
         cancelText: `Cancel`,
@@ -102,8 +106,8 @@ const sharedFolderToggleSharedGet = async (
       });
     } else {
       return res.status(StatusCodes.OK).render("pages/dashboard-confirm-box", {
-        actionPath: `/dashboard/${folderName}/shared-options/toggle-shared`,
-        cancelPath: `/dashboard/${selectedFolderData?.name}/shared-options`,
+        actionPath: `/dashboard/${folderId}/shared-options/toggle-shared`,
+        cancelPath: `/dashboard/${folderId}/shared-options`,
         heading: `Make "${selectedFolderData?.name}" folder shared`,
         message: `You are about to make this folder shared. You can invite other users to collaborate with you and share files. Yo can always dismantle shared folder!`,
         cancelText: `Cancel`,
@@ -122,14 +126,15 @@ const sharedFolderToggleSharedPost = async (
   next: NextFunction
 ) => {
   try {
-    const { folderName } = req.params;
+    const { folderId } = req.params;
     const { userId } = req.user as { userId: string };
 
-    const selectedFolderData = await prisma.folder.findFirst({
-      where: { name: folderName, createdById: userId },
+    const selectedFolderData = await prisma.folder.findUnique({
+      where: { id: folderId },
       include: { files: true },
     });
-    if (selectedFolderData === null)
+
+    if (selectedFolderData?.createdById !== userId)
       throw new BadRequestError("no folder found");
 
     if (selectedFolderData.shared === false) {
@@ -145,7 +150,7 @@ const sharedFolderToggleSharedPost = async (
     }
     return res
       .status(StatusCodes.OK)
-      .redirect(`/dashboard/${selectedFolderData.name}/shared-options`);
+      .redirect(`/dashboard/${selectedFolderData.id}/shared-options`);
   } catch (error) {
     return next(error);
   }
