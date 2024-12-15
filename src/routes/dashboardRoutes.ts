@@ -25,6 +25,8 @@ import {
   sharedFolderAddCollaborator,
   sharedFolderRemoveCollaboratorGet,
   sharedFolderRemoveCollaboratorPost,
+  sharedFolderExitGet,
+  sharedFolderExitPost,
 } from "../controllers/sharedFolderController.js";
 // validators
 import folderValidator from "../config/validators/folderValidator.js";
@@ -84,6 +86,8 @@ router.post(
   "/:folderId/shared-options/remove-user/:userId",
   sharedFolderRemoveCollaboratorPost
 );
+router.get("/:folderId/exit-shared-folder", sharedFolderExitGet);
+router.post("/:folderId/exit-shared-folder", sharedFolderExitPost);
 
 // upload file
 router.get("/:folderId/upload-file", uploadFileGet);

@@ -217,6 +217,59 @@ const sharedFolderRemoveCollaboratorPost = async (
   }
 };
 
+const sharedFolderExitGet = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderId } = req.params;
+
+    const folderData = await prisma.folder.findUnique({
+      where: { id: folderId },
+      select: { name: true },
+    });
+
+    return res.status(StatusCodes.OK).render("pages/dashboard-confirm-box", {
+      actionPath: `/dashboard/${folderId}/exit-shared-folder`,
+      cancelPath: `/dashboard/${folderId}/`,
+      heading: `Exit from ${folderData?.name} folder`,
+      message: `You are about to exit ${folderData?.name} shared folder. Are you sure!`,
+      cancelText: `Cancel`,
+      acceptText: `Exit`,
+      danger: true,
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+const sharedFolderExitPost = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderId } = req.params;
+    const { userId } = req.user as { userId: string };
+
+    await prisma.folder.update({
+      where: { id: folderId },
+      data: {
+        sharedTo: {
+          disconnect: {
+            id: userId,
+          },
+        },
+      },
+    });
+
+    return res.status(StatusCodes.OK).redirect("/dashboard");
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export {
   sharedFolderView,
   sharedFolderToggleSharedGet,
@@ -224,4 +277,6 @@ export {
   sharedFolderAddCollaborator,
   sharedFolderRemoveCollaboratorGet,
   sharedFolderRemoveCollaboratorPost,
+  sharedFolderExitGet,
+  sharedFolderExitPost,
 };

@@ -36,6 +36,15 @@ params: {
     shared`}`, iconName: `folder-special`}) %>
   </div>
   <% } %>
+  <!-- current user is collaborator -->
+  <% if(currentUser !== selectedFolderData.createdById &&
+  selectedFolderData.shared === true) { %>
+  <div class="flex items-center gap-2">
+    <%- include("./dashboard-link", {path:
+    `/dashboard/${selectedFolderData.id}/exit-shared-folder`, text: `exit shared
+    folder`, iconName: `user-remove`}) %>
+  </div>
+  <% } %>
   <!-- general information -->
   <header class="flex items-center gap-8">
     <div>
