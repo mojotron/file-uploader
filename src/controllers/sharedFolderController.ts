@@ -62,8 +62,6 @@ const sharedFolderAddCollaborator = async (
       where: { id: folderId },
     });
 
-    console.log(selectedFolderData);
-
     if (selectedFolderData === null)
       throw new BadRequestError("unknown folder");
 
@@ -172,6 +170,27 @@ const sharedFolderRemoveCollaboratorGet = async (
   next: NextFunction
 ) => {
   try {
+    const { folderId, userId } = req.params;
+
+    const userData = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { username: true },
+    });
+
+    const folderData = await prisma.folder.findUnique({
+      where: { id: folderId },
+      select: { name: true },
+    });
+
+    return res.status(StatusCodes.OK).render("pages/dashboard-confirm-box", {
+      actionPath: `/dashboard/${folderId}/shared-options/remove-user/${userId}`,
+      cancelPath: `/dashboard/${folderId}/shared-options/`,
+      heading: `Remove ${userData?.username} from ${folderData?.name} folder`,
+      message: `You are about to remove user from shared folder. Are you sure!`,
+      cancelText: `Cancel`,
+      acceptText: `Remove user`,
+      danger: true,
+    });
   } catch (error) {
     return next(error);
   }
@@ -183,6 +202,16 @@ const sharedFolderRemoveCollaboratorPost = async (
   next: NextFunction
 ) => {
   try {
+    const { folderId, userId } = req.params;
+
+    await prisma.folder.update({
+      where: { id: folderId },
+      data: { sharedTo: { disconnect: { id: userId } } },
+    });
+
+    return res
+      .status(StatusCodes.OK)
+      .redirect(`/dashboard/${folderId}/shared-options`);
   } catch (error) {
     return next(error);
   }
