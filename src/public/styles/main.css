@@ -569,6 +569,9 @@ video {
 .max-w-\[400px\]{
   max-width: 400px;
 }
+.max-w-\[600px\]{
+  max-width: 600px;
+}
 .cursor-pointer{
   cursor: pointer;
 }
@@ -657,6 +660,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(3 218 197 / var(--tw-bg-opacity, 1));
 }
+.bg-gray-600{
+  --tw-bg-opacity: 1;
+  background-color: rgb(96 96 96 / var(--tw-bg-opacity, 1));
+}
 .bg-gray-800{
   --tw-bg-opacity: 1;
   background-color: rgb(41 41 41 / var(--tw-bg-opacity, 1));
@@ -678,6 +685,10 @@ video {
 .px-4{
   padding-left: 24px;
   padding-right: 24px;
+}
+.px-8{
+  padding-left: 56px;
+  padding-right: 56px;
 }
 .py-0\.5{
   padding-top: 4px;

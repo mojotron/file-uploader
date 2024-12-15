@@ -36,7 +36,6 @@ const uploadFilePost = async (
   next: NextFunction
 ) => {
   try {
-    const { username } = req.user as { userId: string; username: string };
     const { folderId } = req.params;
     const file = req.file;
 
@@ -52,14 +51,10 @@ const uploadFilePost = async (
 
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from(BUCKET_NAME)
-      .upload(
-        `${folderData.name}-${username}/${file.originalname}`,
-        file.buffer,
-        {
-          cacheControl: "3600",
-          upsert: false,
-        }
-      );
+      .upload(`${folderData.id}/${file.originalname}`, file.buffer, {
+        cacheControl: "3600",
+        upsert: false,
+      });
 
     if (uploadError) {
       throw new BadRequestError(`error uploading file to file storage`);
@@ -125,7 +120,7 @@ const deleteFilePost = async (
 
     const { data, error: bucketError } = await supabase.storage
       .from(BUCKET_NAME)
-      .remove([`${fileData.folder.name}-${username}/${fileData.name}`]);
+      .remove([`${fileData.folder.id}/${fileData.name}`]);
     if (bucketError) throw new BadRequestError("error deleting file in bucket");
 
     await prisma.file.delete({ where: { id: fileData.id } });
@@ -142,7 +137,6 @@ const downloadFile = async (
   next: NextFunction
 ) => {
   try {
-    const { username } = req.user as { userId: string; username: string };
     const { folderId, fileId } = req.params;
 
     const fileData = await prisma.file.findUnique({
@@ -153,13 +147,9 @@ const downloadFile = async (
 
     const { data: signedData, error: dataError } = await supabase.storage
       .from(BUCKET_NAME)
-      .createSignedUrl(
-        `${fileData.folder.name}-${username}/${fileData.name}`,
-        60,
-        {
-          download: true,
-        }
-      );
+      .createSignedUrl(`${fileData.folder.id}/${fileData.name}`, 60, {
+        download: true,
+      });
     if (dataError) throw new BadRequestError("error signing data");
 
     return res.status(StatusCodes.OK).redirect(signedData.signedUrl);

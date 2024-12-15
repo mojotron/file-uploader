@@ -144,10 +144,6 @@ const deleteFolderPost = async (
 ) => {
   try {
     const { folderId } = req.params;
-    const { userId, username } = req.user as {
-      userId: string;
-      username: string;
-    };
 
     const folderData = await prisma.folder.findUnique({
       where: { id: folderId },
@@ -157,8 +153,7 @@ const deleteFolderPost = async (
     if (folderData === null) throw new BadRequestError("unkonwn folder");
     // DELETE ALL FROM SUPABASE
     const filesToDelete = folderData.files.map(
-      (file) =>
-        `${folderData.name}-${folderData.createdBy.username}/${file.name}`
+      (file) => `${folderData.id}/${file.name}`
     );
 
     if (filesToDelete.length > 0) {

@@ -9,19 +9,83 @@
   <body class="w-[100vw] h-[100vh] bg-gray-800 flex flex-col">
     <%- include("../partials/header") %>
 
-    <main class="px-4 py-8 flex flex-col items-center">
-      <section>
+    <main class="px-4 py-8 flex flex-col items-center gap-2">
+      <section
+        class="w-full max-w-[600px] py-4 px-8 flex flex-col items-center justify-center gap-2 rounded-md"
+      >
         <%- include("../partials/section-heading", {text: `what is file
         storage`}) %>
+        <!--  -->
+        <%- include("../partials/paragraph", {text: `File storage is free tiny
+        storage for your PDF files. You can create folders and add files to
+        them. You can access your files by downloading them to any device.`}) %>
       </section>
 
-      <section>
+      <section
+        class="w-full max-w-[600px] py-4 px-8 flex flex-col items-center justify-center gap-2 rounded-md"
+      >
+        <%- include("../partials/section-heading", {text: `share files with
+        others`}) %>
+        <!--  -->
+        <%- include("../partials/paragraph", {text: `File storage allow you to
+        share files by making folders shared. Add your friends using emails and
+        collaborate.`}) %>
+      </section>
+
+      <section
+        class="w-full max-w-[600px] bg-gray-600 py-4 px-8 flex flex-col items-center justify-center gap-4 rounded-md"
+      >
         <%- include("../partials/section-heading", {text: `ready to try`}) %>
+        <!--  -->
+        <%- include("../partials/paragraph", {text: `Create free account by
+        clicking signup button or login to existing account.`}) %>
+        <div>
+          <%- include("../partials/cta-link", {path: `/login`, text: `login`,
+          inverted: false}) %>
+          <!--  -->
+          <%- include("../partials/cta-link", {path: `/signup`, text: `signup`,
+          inverted: true}) %>
+        </div>
       </section>
 
-      <section>
-        <%- include("../partials/section-heading", {text: `access your files
-        from any device`}) %>
+      <section
+        class="w-full max-w-[600px] py-4 px-8 flex flex-col items-center justify-center gap-2 rounded-md"
+      >
+        <%- include("../partials/section-heading", {text: `about this project`})
+        %>
+        <!--  -->
+        <%- include("../partials/paragraph", {text: `This is learning project.
+        Number and size of files to store is limited.`}) %>
+        <div class="text-blue-300 bg-gray-900 p-4 rounded-md">
+          <h4 class="font-bold font-barlow text-lg">Disclaimer:</h4>
+          <p>
+            Do not upload sensitive data. Your data can be lost duo to project
+            upgrades! Project author assumes no responsibility or liability for
+            any errors or omissions in the content of this site, or data you
+            upload!
+          </p>
+        </div>
+        <p class="text-gray-200">
+          This project is part of
+          <a
+            class="font-bold hover:text-blue-300"
+            href="https://www.theodinproject.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            >The Odin Project</a
+          >
+          web backend curriculum.
+        </p>
+        <p class="text-gray-200">
+          If you like this project visit projects
+          <a
+            href="https://github.com/mojotron/file-uploader"
+            class="font-bold hover:text-blue-300"
+            target="_blank"
+            rel="noopener noreferrer"
+            >github page</a
+          >. Feel free to fork it and add your own twist to it.
+        </p>
       </section>
     </main>
 
