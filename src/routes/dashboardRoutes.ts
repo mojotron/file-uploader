@@ -38,6 +38,11 @@ import {
   collaboratorValidationMiddleware,
   fileValidationMiddleware,
 } from "../middlewares/validationMiddlewares.js";
+// user limitations
+import {
+  folderLimitMiddleware,
+  fileLimitMiddleware,
+} from "../middlewares/storageLimitMiddlewares.js";
 //
 import upload from "../config/multer/multerConfig.js";
 
@@ -46,7 +51,7 @@ const router = Router();
 router.get("/", getDashboardView);
 
 // folders
-router.get("/create-folder", createFolderGet);
+router.get("/create-folder", folderLimitMiddleware, createFolderGet);
 router.post(
   "/create-folder",
   folderValidator,
@@ -92,7 +97,7 @@ router.get("/:folderId/exit-shared-folder", sharedFolderExitGet);
 router.post("/:folderId/exit-shared-folder", sharedFolderExitPost);
 
 // upload file
-router.get("/:folderId/upload-file", uploadFileGet);
+router.get("/:folderId/upload-file", fileLimitMiddleware, uploadFileGet);
 router.post(
   "/:folderId/upload-file",
   upload.single("file"),
