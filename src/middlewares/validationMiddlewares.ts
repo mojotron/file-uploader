@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from "express";
-import { validationResult, Result } from "express-validator";
+import { validationResult, Result, matchedData } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import prisma from "../config/prisma/prismaConfig.js";
 import { name } from "ejs";
@@ -178,9 +178,42 @@ const collaboratorValidationMiddleware = async (
   }
 };
 
+const fileValidationMiddleware = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { folderId } = req.params;
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      const validationErrors = getErrorMessages(result);
+
+      const folderData = await prisma.folder.findUnique({
+        where: { id: folderId },
+        select: { name: true },
+      });
+
+      return res
+        .status(StatusCodes.BAD_REQUEST)
+        .render("pages/dashboard-file-form", {
+          currentFolder: folderData?.name,
+          actionPath: `/dashboard/${folderId}/upload-file`,
+          validationErrors,
+        });
+    }
+
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export {
   signupValidationMiddleware,
   loginValidationMiddleware,
   folderValidationMiddleware,
   collaboratorValidationMiddleware,
+  fileValidationMiddleware,
 };

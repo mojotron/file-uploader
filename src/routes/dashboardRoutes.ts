@@ -31,10 +31,12 @@ import {
 // validators
 import folderValidator from "../config/validators/folderValidator.js";
 import collaboratorValidator from "../config/validators/collaboratorValidator.js";
+import fileValidator from "../config/validators/fileValidator.js";
 // validation middleware
 import {
   folderValidationMiddleware,
   collaboratorValidationMiddleware,
+  fileValidationMiddleware,
 } from "../middlewares/validationMiddlewares.js";
 //
 import upload from "../config/multer/multerConfig.js";
@@ -91,7 +93,13 @@ router.post("/:folderId/exit-shared-folder", sharedFolderExitPost);
 
 // upload file
 router.get("/:folderId/upload-file", uploadFileGet);
-router.post("/:folderId/upload-file", upload.single("file"), uploadFilePost);
+router.post(
+  "/:folderId/upload-file",
+  upload.single("file"),
+  fileValidator,
+  fileValidationMiddleware,
+  uploadFilePost
+);
 // delete file
 router.get("/:folderId/:fileId/delete", deleteFileGet);
 router.post("/:folderId/:fileId/delete", deleteFilePost);

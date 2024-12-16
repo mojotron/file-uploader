@@ -47,9 +47,11 @@
             size="10"
           />
           <p class="text-sm text-gray-400">
-            txt, pdf, svg, png, jpg or jpeg, maximum size 1MB
+            only pdf files with maximum size 1MB
           </p>
         </div>
+        <!--  -->
+        <%- include("../partials/form-errors", {validationErrors}) %>
         <!--  -->
         <%- include("../partials/form-button", {text: `Upload file`}) %>
       </form>

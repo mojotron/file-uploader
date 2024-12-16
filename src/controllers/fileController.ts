@@ -24,6 +24,7 @@ const uploadFileGet = async (
     return res.status(StatusCodes.OK).render("pages/dashboard-file-form", {
       currentFolder: folderData?.name,
       actionPath: `/dashboard/${folderId}/upload-file`,
+      validationErrors: [],
     });
   } catch (error) {
     return next(error);
