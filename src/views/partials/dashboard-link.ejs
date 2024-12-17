@@ -8,8 +8,8 @@ params: {
 -->
 
 <a href="<%- path %>" class="block" title="<%- text %>">
-  <div class="flex items-center font-normal">
-    <img src="/images/<%- iconName %>.svg" class="<%- shrink === true ? "hover:bg-gray-200 hover:rounded-md": "" %> "/>
+  <div class="flex items-center font-normal group">
+    <img src="/images/<%- iconName %>.svg" class="<%- shrink === true ? "hover:bg-gray-200 hover:rounded-md sm:hover:rounded-none sm:hover:bg-gray-800": "" %> "/>
     <span class="font-barlow font-bold text-gray-400 group-hover:text-gray-200 <%- shrink === true ? "hidden sm:block": "" %>"
       ><%-text%></span
     >

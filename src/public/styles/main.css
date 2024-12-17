@@ -933,6 +933,15 @@ video {
   .sm\:text-2xl{
     font-size: 1.953rem;
   }
+
+  .sm\:hover\:rounded-none:hover{
+    border-radius: 0px;
+  }
+
+  .sm\:hover\:bg-gray-800:hover{
+    --tw-bg-opacity: 1;
+    background-color: rgb(41 41 41 / var(--tw-bg-opacity, 1));
+  }
 }
 @media (min-width: 768px){
 
