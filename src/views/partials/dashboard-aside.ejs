@@ -8,37 +8,41 @@ id is used for selecting correct folder
 -->
 
 <aside
-  class="col-start-1 col-end-5 row-start-2 row-end-13 bg-gray-900 sm:col-end-4 md:col-end-3 flex flex-col gap-2 pl-2"
+  class="col-start-1 col-end-13 row-start-2 row-end-6 bg-gray-900 sm:row-start-2 sm:row-end-13 sm:col-start-1 sm:col-end-4 flex flex-col gap-2 pl-2"
 >
-  <div class="">
+  <div class="flex items-center gap-2 sm:flex-col sm:items-start sm:gap-1">
     <%- include("./dashboard-link", {path: `/dashboard/`, text: `home`,
-    iconName: `home`}) %>
+    iconName: `home`,shrink: false}) %>
     <!--  -->
     <%- include("./dashboard-link", {path: `/dashboard/create-folder`, text:
-    `create folder`, iconName: `folder-create`}) %>
+    `create folder`, iconName: `folder-create`,shrink: false}) %>
   </div>
 
-  <div>
-    <h3 class="font-barlow font-bold tracking-wider text-gray-400">folders</h3>
-    <% userFolders.forEach((folder) => { %>
-    <!--  -->
-    <%- include("./dashboard-link", {path: `/dashboard/${folder.id}`, text:
-    `${folder.name}`, iconName: `${folder.id === selectedFolder ? "folder-open"
-    : "folder-close"}`}) %>
-    <!--  -->
-    <% }) %>
-  </div>
+  <section class="flex gap-2 sm:flex-col sm:gap-1 overflow-y-scroll">
+    <div>
+      <h3 class="font-barlow font-bold tracking-wider text-gray-400">
+        folders
+      </h3>
+      <% userFolders.forEach((folder) => { %>
+      <!--  -->
+      <%- include("./dashboard-link", {path: `/dashboard/${folder.id}`, text:
+      `${folder.name}`, iconName: `${folder.id === selectedFolder ?
+      "folder-open" : "folder-close"}`,shrink: false}) %>
+      <!--  -->
+      <% }) %>
+    </div>
 
-  <div>
-    <h3 class="font-barlow font-bold tracking-wider text-gray-400">
-      shared folders
-    </h3>
-    <% sharedFolders.forEach((folder) => { %>
-    <!--  -->
-    <%- include("./dashboard-link", {path: `/dashboard/${folder.id}`, text:
-    `${folder.name}`, iconName: `${folder.id === selectedFolder ? "folder-open"
-    : "folder-close"}`}) %>
-    <!--  -->
-    <% }) %>
-  </div>
+    <div>
+      <h3 class="font-barlow font-bold tracking-wider text-gray-400">
+        shared folders
+      </h3>
+      <% sharedFolders.forEach((folder) => { %>
+      <!--  -->
+      <%- include("./dashboard-link", {path: `/dashboard/${folder.id}`, text:
+      `${folder.name}`, iconName: `${folder.id === selectedFolder ?
+      "folder-open" : "folder-close"}`,shrink: false}) %>
+      <!--  -->
+      <% }) %>
+    </div>
+  </section>
 </aside>

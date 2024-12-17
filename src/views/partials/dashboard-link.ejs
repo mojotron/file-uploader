@@ -3,16 +3,15 @@ params: {
   path: string
   iconName: string
   text: string
+  shrink: boolean
 }
 -->
 
-<a
-  href="<%- path %>"
-  class="flex items-center px-1 py-0.5 group"
-  title="<%- text %>"
->
-  <img src="/images/<%- iconName %>.svg" />
-  <span class="font-barlow font-bold text-gray-400 group-hover:text-gray-200"
-    ><%-text%></span
-  >
+<a href="<%- path %>" class="block" title="<%- text %>">
+  <div class="flex items-center font-normal">
+    <img src="/images/<%- iconName %>.svg" class="<%- shrink === true ? "hover:bg-gray-200 hover:rounded-md": "" %> "/>
+    <span class="font-barlow font-bold text-gray-400 group-hover:text-gray-200 <%- shrink === true ? "hidden sm:block": "" %>"
+      ><%-text%></span
+    >
+  </div>
 </a>

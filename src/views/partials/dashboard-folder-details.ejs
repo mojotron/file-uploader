@@ -17,23 +17,23 @@ params: {
 }
 -->
 <main
-  class="col-start-5 col-end-13 row-start-2 row-end-13 sm:col-start-4 md:col-start-3 bg-gray-800 p-4 space-y-4"
+  class="col-start-1 col-end-12 row-start-6 row-end-13 sm:row-start-2 sm:col-start-4 bg-gray-800 p-4 space-y-4 overflow-y-scroll"
 >
   <!-- current user is owner display controls -->
   <% if(currentUser === selectedFolderData.createdById) { %>
   <div class="flex items-center gap-2">
     <%- include("./dashboard-link", {path:
     `/dashboard/${selectedFolderData.id}/edit`, text: `edit folder`, iconName:
-    `folder-update`}) %>
+    `folder-update`, shrink: true}) %>
     <!--  -->
     <%- include("./dashboard-link", {path:
     `/dashboard/${selectedFolderData.id}/delete`, text: `delete folder`,
-    iconName: `folder-delete`}) %>
+    iconName: `folder-delete`,shrink: true}) %>
     <!--  -->
     <%- include("./dashboard-link", {path:
     `/dashboard/${selectedFolderData.id}/shared-options`, text:
     `${selectedFolderData.shared ? `shared folder options`:`make folder
-    shared`}`, iconName: `folder-special`}) %>
+    shared`}`, iconName: `folder-special`,shrink: true}) %>
   </div>
   <% } %>
   <!-- current user is collaborator -->
@@ -42,7 +42,7 @@ params: {
   <div class="flex items-center gap-2">
     <%- include("./dashboard-link", {path:
     `/dashboard/${selectedFolderData.id}/exit-shared-folder`, text: `exit shared
-    folder`, iconName: `user-remove`}) %>
+    folder`, iconName: `user-remove`,shrink: true}) %>
   </div>
   <% } %>
   <!-- general information -->
@@ -60,7 +60,7 @@ params: {
     </div>
     <%- include("./dashboard-link", {path:
     `/dashboard/${selectedFolderData.id}/upload-file`, text: `upload new file`,
-    iconName: `file-upload`}) %>
+    iconName: `file-upload`,shrink: true}) %>
   </header>
 
   <!-- FILES -->
@@ -74,11 +74,11 @@ params: {
         <div class="flex items-center gap-4">
           <%- include("./dashboard-link", {path:
           `/dashboard/${selectedFolderData.id}/${file.id}/download`, text:
-          `download file`, iconName: `file-download`}) %>
+          `download file`, iconName: `file-download`,shrink: true}) %>
           <!--  -->
           <%- include("./dashboard-link", {path:
           `/dashboard/${selectedFolderData.id}/${file.id}/delete`, text: `delete
-          file`, iconName: `file-delete`}) %>
+          file`, iconName: `file-delete`,shrink: true}) %>
         </div>
       </li>
       <% }) %>
