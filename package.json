@@ -4,7 +4,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "build": "tsc",
+    "build": "gulp build",
     "start": "node ./dist/server.js",
     "dev": "node --no-warnings=ExperimentalWarning --loader ts-node/esm --watch src/server.ts",
     "css:build": "postcss src/public/styles/tailwind.css -o src/public/styles/main.css"
@@ -23,6 +23,9 @@
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
     "autoprefixer": "^10.4.20",
+    "gulp": "^5.0.0",
+    "gulp-copy": "^5.0.0",
+    "gulp-typescript": "^6.0.0-alpha.1",
     "postcss": "^8.4.49",
     "postcss-cli": "^11.0.0",
     "prisma": "^5.22.0",
