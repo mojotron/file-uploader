@@ -79,6 +79,7 @@ const folderValidationMiddleware = async (
     const { userId } = req.user as { userId: string };
     const { folderName } = req.body; // for checking if folder is created or updated
     const { folderId } = req.params;
+    const isUpdating = folderId !== undefined;
 
     const result = validationResult(req);
 
@@ -92,15 +93,13 @@ const folderValidationMiddleware = async (
       (folder) => folder.name === folderName
     );
 
-    if (!result.isEmpty() || folderExists) {
+    if (!result.isEmpty() || (folderExists && !isUpdating)) {
       const validationErrors = getErrorMessages(result);
 
       if (folderExists)
         validationErrors.push(
           `current user already have folder with this name`
         );
-
-      const isUpdating = folderId !== undefined;
 
       return res.status(StatusCodes.OK).render("pages/dashboard-folder-form", {
         actionPath: isUpdating

@@ -6,12 +6,8 @@ import passport from "passport";
 const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
   const { email, password } = matchedData(req);
 
-  console.log("OK");
-
   passport.authenticate("local", (err: Error, user: any, info: any) => {
-    if (err) return next(err);
-
-    if (!user) {
+    if (err || !user) {
       return res.status(StatusCodes.BAD_REQUEST).render("pages/login-form", {
         actionPath: "/login",
         inputValues: {

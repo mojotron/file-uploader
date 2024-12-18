@@ -511,17 +511,11 @@ video {
 .col-start-1{
   grid-column-start: 1;
 }
-.col-start-5{
-  grid-column-start: 5;
-}
 .col-end-12{
   grid-column-end: 12;
 }
 .col-end-13{
   grid-column-end: 13;
-}
-.col-end-5{
-  grid-column-end: 5;
 }
 .row-span-1{
   grid-row: span 1 / span 1;
@@ -944,14 +938,6 @@ video {
   }
 }
 @media (min-width: 768px){
-
-  .md\:col-start-3{
-    grid-column-start: 3;
-  }
-
-  .md\:col-end-3{
-    grid-column-end: 3;
-  }
 
   .md\:w-\[350px\]{
     width: 350px;

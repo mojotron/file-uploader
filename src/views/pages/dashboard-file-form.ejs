@@ -10,17 +10,17 @@
     <%- include("../partials/dashboard-header") %>
     <!--  -->
     <section
-      class="col-start-1 col-end-5 row-start-2 row-end-13 bg-gray-900 sm:col-end-4 md:col-end-3 flex flex-col gap-2 pl-2"
+      class="col-start-1 col-end-13 row-start-2 row-end-3 bg-gray-900 flex-col gap-2 pl-2"
     >
       <%- include("../partials/dashboard-link", {path: `/dashboard/`, text:
-      `home`, iconName: `home`}) %>
+      `home`, iconName: `home`, shrink: false}) %>
       <!--  -->
       <%- include("../partials/dashboard-link", {path:
       `/dashboard/${currentFolder}`, text: `${currentFolder}`, iconName:
-      `folder-open`}) %>
+      `folder-open`, shrink: false}) %>
     </section>
     <main
-      class="col-start-5 col-end-13 row-start-2 row-end-13 sm:col-start-4 md:col-start-3 bg-gray-800 p-4"
+      class="col-start-1 col-end-13 row-start-3 row-end-13 bg-gray-800 mx-auto p-4 space-y-4 overflow-y-scroll"
     >
       <form
         action="<%- actionPath %>"

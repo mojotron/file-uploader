@@ -58,7 +58,7 @@
               <span> <%- user.username %> </span>
               <%- include("../partials/dashboard-link",
               {path:`/dashboard/${selectedFolderData.id}/shared-options/remove-user/${user.id}`,
-              iconName: `user-remove`, text: `remove user`, shrink: false}) %>
+              iconName: `user-remove`, text: `remove user`, shrink: true}) %>
             </li>
             <% }) %>
           </ul>

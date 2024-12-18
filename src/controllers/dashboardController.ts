@@ -49,8 +49,8 @@ const getDashboardView = async (
 
     return res.status(StatusCodes.OK).render("pages/dashboard", {
       currentUser: userId,
-      userFolders: currentUserData?.folders,
-      sharedFolders: currentUserData?.sharedFolders,
+      userFolders: currentUserData?.folders || [],
+      sharedFolders: currentUserData?.sharedFolders || [],
       selectedFolder: folderId || "",
       selectedFolderData,
     });
