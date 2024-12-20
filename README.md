@@ -2,7 +2,7 @@
 
 In this project, we’ll be building a stripped down version of Google Drive (or any other personal storage service).
 
-Project 👉 (Live Preview)[]
+Project 👉 (Live Preview)[https://chip-maple-stargazer.glitch.me/]
 
 Build an stripped down version of Google Drive (or any other personal storage service).
 User can make folders and upload and download pdf files from those folders. User can create public folder to share files with friends.
